@@ -1,0 +1,4 @@
+interpreter
+lex.yy.c
+pars.tab.c
+pars.tab.h

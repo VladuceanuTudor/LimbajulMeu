@@ -1,0 +1,41 @@
+%{
+#include "pars.tab.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+int colNo = 0;
+int lineNo = 1; // Prima linie începe de la 1
+%}
+
+%option noyywrap
+
+%%
+
+"intreg"                   { colNo += yyleng; return TOK_INTREG; }
+"real"                     { colNo += yyleng; return TOK_REAL; }
+"zecimal"                  { colNo += yyleng; return TOK_ZECIMAL; }
+"program"                  { colNo += yyleng; return TOK_PROGR; }
+"afiseaza"                 { colNo += yyleng; return TOK_AFISEAZA; }
+"begin"                    {colNo += yyleng; return TOK_BEGIN; }
+"end"                      {colNo += yyleng; return TOK_END; }
+
+
+"+"                         { colNo++; return TOK_PLUS; }
+"-"                         { colNo++; return TOK_MINUS; }
+"*"                         { colNo++; return TOK_MULT; }
+"/"                         { colNo++; return TOK_DIV; }
+"="                         { colNo++; return TOK_EQ; }
+";"                         { colNo++; return TOK_SEP; }
+"("                         { colNo++; return TOK_OPARAN; }
+")"                         { colNo++; return TOK_CPARAN; }
+
+[0-9]+","[0-9]+"f"              { colNo += yyleng; yylval.floatVal = atof(yytext); return CTZ; }  // Zecimal cu virgulă
+[0-9]+"."[0-9]+             { colNo += yyleng; yylval.doubleVal = atof(yytext); return CTR; }  // Real
+[0-9]+                     { colNo += yyleng; yylval.intVal = atoi(yytext); return CTI; }  // Intreg
+[a-zA-Z_][a-zA-Z0-9_]*      { colNo += yyleng; yylval.str=strdup(yytext); return ID; }
+
+[ \t]                       { colNo += yyleng; }
+\n                          { lineNo++; colNo = 0; }
+.                           { colNo++; return TOK_ERR; }
+
+%%

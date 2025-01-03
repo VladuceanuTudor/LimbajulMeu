@@ -1,0 +1,7 @@
+program cod begin
+    intreg x = 10;
+    real y = 3.14;
+    zecimal z = 2,5f;
+    x = x + 5;
+    afiseaza x;
+end
