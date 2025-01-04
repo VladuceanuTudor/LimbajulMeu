@@ -5,6 +5,7 @@
 #include "vars.h"
 
 int yylex();
+extern int yylex_destroy();
 int yyerror(char* msg);
 extern FILE* yyin;
 extern int lineNo;  // Declarația pentru variabila externă
@@ -214,25 +215,88 @@ E   : E TOK_PLUS E     {$$ = $1 + $3;}
 
 %%
 
-int main(int argc, char** argv)
-{
+void runInteractiveMode();
+void runScript(const char* filename);
+
+int main(int argc, char** argv) {
     if (argc == 2) {
-        yyin = fopen(argv[1], "r");
+        runScript(argv[1]);
+    } else if (argc == 1) {
+        runInteractiveMode();
+    } else {
+        printf("Usage:\n");
+        printf("  %s                - Interactive mode\n", argv[0]);
+        printf("  %s <filename>     - Run script file\n", argv[0]);
+        return 1;
+    }
+
+    return 0;
+}
+
+void runInteractiveMode() {
+    char input[1024];
+    FILE* tmpFile;
+
+    printf("Interpretor activat. Introduceți comenzi (scrieți `exit` pentru a ieși).\n");
+    while (1) {
+        printf("> ");
+        if (!fgets(input, sizeof(input), stdin)) break;
+
+        input[strcspn(input, "\n")] = 0;
+
+        if (strcmp(input, "exit") == 0) {
+            printf("Ieșire din interpretor.\n");
+            break;
+        }
+
+        // Write the command to a temporary file
+        tmpFile = fopen("tmp.vld", "w");
+        if (!tmpFile) {
+            perror("Eroare la crearea fișierului temporar");
+            continue;
+        }
+        fprintf(tmpFile, "%s\n", input);
+        fclose(tmpFile);
+
+        // Parse the command using the parser
+        yyin = fopen("tmp.vld", "r");
         if (!yyin) {
-            perror("Error opening file");
-            return 1;
+            perror("Eroare la deschiderea fișierului temporar");
+            continue;
+        }
+        yyparse();
+        fclose(yyin);
+
+        // Destroy lexer state to reset for the next command
+        yylex_destroy();
+
+        // Show success or error message
+        if (successRun) {
+            printf("Succes :)\n");
+        } else {
+            printf("Eroare :(\n");
         }
     }
+}
+
+void runScript(const char* filename) {
+    yyin = fopen(filename, "r");
+    if (!yyin) {
+        perror("Error opening file");
+        return;
+    }
+
+    printf("Rularea scriptului: %s\n", filename);
     yyparse();
+    fclose(yyin);
+
+    yylex_destroy();
 
     if (successRun) {
         printf("\nSucces :)\n");
     } else {
         printf("\nEroare :(\n");
     }
-
-    fclose(yyin);
-    return 0;
 }
 
 int yyerror(char* msg)
