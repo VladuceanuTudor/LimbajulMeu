@@ -18,9 +18,11 @@ int successRun = 1;
 %token <str>ID 
 %token TOK_INTREG TOK_REAL TOK_ZECIMAL TOK_EQ TOK_BEGIN TOK_END TOK_PROGR
 %token TOK_AFISEAZA
+%token TOK_CITESTE
 %token <intVal>CTI <doubleVal>CTR <floatVal>CTZ
 %token TOK_PLUS TOK_MINUS TOK_MULT TOK_DIV 
-%token TOK_SEP TOK_OPARAN TOK_CPARAN TOK_ERR
+%token TOK_SEP TOK_OPARAN TOK_CPARAN TOK_ERR TOK_COMM
+%token <str>TXT
 
 %type <doubleVal> E
 
@@ -78,7 +80,39 @@ I   : D
         break;}
         p->val = $3;
     }
-    | TOK_AFISEAZA ID               {
+    | TOK_AFISEAZA PRINT
+    | TOK_CITESTE SCAN
+    ;
+
+SCAN : SCAN ID      {
+        Var* p = getVar($2);
+        if(!p)
+        {yyerror("Variabila nedeclarata!\n");
+        break;}
+        if(p->tip==1)
+            scanf("%lf", &p->val);
+        if(p->tip==2)
+            scanf("%lf", &p->val);
+        if(p->tip==3)
+            scanf("%lf", &p->val);
+        
+    }
+    | ID        {
+        Var* p = getVar($1);
+        if(!p)
+        {yyerror("Variabila nedeclarata!\n");
+        break;}
+        if(p->tip==1)
+            scanf("%lf", &p->val);
+        if(p->tip==2)
+            scanf("%lf", &p->val);
+        if(p->tip==3)
+            scanf("%lf", &p->val);
+        
+    }
+    ;
+
+PRINT : PRINT ID              {
         Var* p = getVar($2);
         if(!p)
         {yyerror("Variabila nedeclarata!\n");
@@ -88,9 +122,48 @@ I   : D
         if(p->tip==2)
             printf("%lf", p->val);
         if(p->tip==3)
-            printf("%f", p->val);
-    }
-    ;
+            printf("%.6f", p->val);
+        }
+        | PRINT TXT{
+            // if(strcmp($2, "\\n")==0)
+            //     printf("\n");
+            // else if(strcmp($2, "\\t")==0)
+            //     printf("\t");
+            char aux[200] = "\n";
+            while(strstr($2, "\\n")){
+                strcpy(aux,"\n");
+                strcat(aux, strstr($2, "\\n")+2);
+                strcpy(strstr($2, "\\n"), aux);
+            }
+            while(strstr($2, "\\t")){
+                strcpy(aux,"\n");
+                strcat(aux, strstr($2, "\\t")+2);
+                strcpy(strstr($2, "\\t"), aux);
+            }
+            printf("%s", (char*)$2);
+        }
+        | ID {
+        Var* p = getVar($1);
+        if(!p)
+        {yyerror("Variabila nedeclarata!\n");
+        break;}
+        if(p->tip==1)
+            printf("%d", (int)p->val);
+        if(p->tip==2)
+            printf("%lf", p->val);
+        if(p->tip==3)
+            printf("%.6f", p->val);
+        }
+        | TXT{
+            while(strstr($1, "\\n")){
+                strcpy(strstr($1, "\\n"), "\n");
+            }
+            while(strstr($1, "\\t")){
+                strcpy(strstr($1, "\\t"), "\t");
+            }
+            printf("%s", (char*)$1);
+        }
+        ;
 
 E   : E TOK_PLUS E     {$$ = $1 + $3;}     
     | E TOK_MINUS E     {$$ = $1 - $3;}   
@@ -129,9 +202,9 @@ int main(int argc, char** argv)
     yyparse();
 
     if (successRun) {
-        printf("Succes :)\n");
+        printf("\nSucces :)\n");
     } else {
-        printf("Eroare :(\n");
+        printf("\nEroare :(\n");
     }
 
     fclose(yyin);
