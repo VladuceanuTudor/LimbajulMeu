@@ -21,9 +21,11 @@ int successRun = 1;
 %token TOK_CITESTE
 %token <intVal>CTI <doubleVal>CTR <floatVal>CTZ
 %token TOK_PLUS TOK_MINUS TOK_MULT TOK_DIV 
-%token TOK_SEP TOK_OPARAN TOK_CPARAN TOK_ERR TOK_COMM
+%token TOK_SEP TOK_OPARAN TOK_CPARAN TOK_ERR TOK_COMM TOK_LACC TOK_RACC
 %token <str>TXT
 %token TOK_LOWER TOK_GREATER TOK_EQUAL TOK_DIFFERENT TOK_LWEQ TOK_GREQ
+%token TOK_DACA TOK_ATUNCI TOK_ALTFEL
+
 
 %type <doubleVal> E
 
@@ -47,33 +49,44 @@ Lg  : Lg D TOK_SEP
     ;
 
 D   : TOK_INTREG ID {
-    addVar($2, 0, 1);
+    addVar($2, 0, 1, currentScopeLevel);
 }
     | TOK_INTREG ID TOK_EQ CTI{
-    addVar($2, $4, 1);
+    addVar($2, $4, 1, currentScopeLevel);
 }
     | TOK_REAL ID{
-    addVar($2, 0, 2);
+    addVar($2, 0, 2, currentScopeLevel);
 }
     | TOK_REAL ID TOK_EQ CTR{
-    addVar($2, $4, 2);
+    addVar($2, $4, 2, currentScopeLevel);
 }
     | TOK_ZECIMAL ID{
-    addVar($2, 0, 3);
+    addVar($2, 0, 3, currentScopeLevel);
 }
     | TOK_ZECIMAL ID TOK_EQ CTZ{
-    addVar($2, $4, 3);
+    addVar($2, $4, 3, currentScopeLevel);
 }
     ;
 
-P   : TOK_PROGR ID TOK_BEGIN Li TOK_END 
+P   : TOK_BEGIN BLOCK TOK_END 
     ;
 
-Li  :
+BLOCK : TOK_LACC{
+            startScope();
+            }
+       Li TOK_RACC {
+             endScope();
+      }
+      ;
+
+Li  : 
+    | Li BLOCK
     | Li TOK_COMM
     | Li I TOK_SEP
     | I TOK_SEP
     ;
+
+
 
 I   : D
     | ID TOK_EQ E {
@@ -181,12 +194,12 @@ E   : E TOK_PLUS E     {$$ = $1 + $3;}
             $$ = $1 / $3;
         }
     }
-    | E TOK_EQUAL E { $$ = $1 == $3}
-    | E TOK_GREATER E { $$ = $1 > $3}
-    | E TOK_LOWER E { $$ = $1 < $3}
-    | E TOK_GREQ E { $$ = $1 >= $3}
-    | E TOK_LWEQ E { $$ = $1 <= $3}
-    | E TOK_DIFFERENT E { $$ = $1 != $3}
+    | E TOK_EQUAL E { $$ = ($1 == $3);}
+    | E TOK_GREATER E { $$ = ($1 > $3);}
+    | E TOK_LOWER E { $$ = ($1 < $3);}
+    | E TOK_GREQ E { $$ = ($1 >= $3);}
+    | E TOK_LWEQ E { $$ = ($1 <= $3);}
+    | E TOK_DIFFERENT E { $$ = ($1 != $3);}
     | CTI{$$=(double)$1;}
     | CTR
     | CTZ{$$=(double)$1;}

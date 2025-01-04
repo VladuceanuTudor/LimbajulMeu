@@ -19,6 +19,9 @@ int lineNo = 1; // Prima linie începe de la 1
 "begin"                    {colNo += yyleng; return TOK_BEGIN; }
 "end"                      {colNo += yyleng; return TOK_END; }
 "citeste"                  { colNo += yyleng; return TOK_CITESTE; }
+"daca"                     { colNo += yyleng; return TOK_DACA;}
+"atunci"                   { colNo += yyleng; return TOK_ATUNCI;}
+"altfel"                   {colNo += yyleng; return TOK_ALTFEL;}
 
 
 "+"                         { colNo++; return TOK_PLUS; }
@@ -35,6 +38,8 @@ int lineNo = 1; // Prima linie începe de la 1
 "!="                        { colNo++; return TOK_DIFFERENT; }
 "<="                        { colNo++; return TOK_LWEQ; }
 ">="                        { colNo++; return TOK_GREQ; }
+"{"                         { colNo++; return TOK_LACC; }
+"}"                         { colNo++; return TOK_RACC; }
 
 "//"[^\n]*                           { colNo += yyleng; return TOK_COMM; }
 \/\*[^*]*\*+([^/*][^*]*\*+)*\/       { colNo += yyleng; return TOK_COMM; }

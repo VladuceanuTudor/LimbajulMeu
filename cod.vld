@@ -1,12 +1,20 @@
-program cod begin
+begin 
+{
     intreg x = 10;
     real y = 3.14;
     zecimal z = 2.5f; x = x + 5;
     citeste x y z;
-    x = x/3; 
+    x = x/3;
+    {
+        intreg t =4;
+        afiseaza t " ";
+    } 
+    //afiseaza t " ";
+    
     //test comm
     /*afiseaza "\t";
     cacat pe bat*/
     
     afiseaza y "\n";
+} 
 end
