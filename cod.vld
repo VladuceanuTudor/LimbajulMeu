@@ -1,11 +1,12 @@
 program cod begin
     intreg x = 10;
     real y = 3.14;
-    zecimal z = 2.5f;
-    citeste z y x;
-    x = x + 5;
-    x = x/3;
-    afiseaza x " " z "\tam atatia\n bani: \n";
-    afiseaza "\t";
+    zecimal z = 2.5f; x = x + 5;
+    citeste x y z;
+    x = x/3; 
+    //test comm
+    /*afiseaza "\t";
+    cacat pe bat*/
+    
     afiseaza y "\n";
 end

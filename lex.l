@@ -29,12 +29,19 @@ int lineNo = 1; // Prima linie începe de la 1
 ";"                         { colNo++; return TOK_SEP; }
 "("                         { colNo++; return TOK_OPARAN; }
 ")"                         { colNo++; return TOK_CPARAN; }
+"<"                         { colNo++; return TOK_LOWER; }
+">"                         { colNo++; return TOK_GREATER; }
+"=="                        { colNo++; return TOK_EQUAL; }
+"!="                        { colNo++; return TOK_DIFFERENT; }
+"<="                        { colNo++; return TOK_LWEQ; }
+">="                        { colNo++; return TOK_GREQ; }
 
-"//".*                       { colNo+=yyleng; return TOK_COMM;}
+"//"[^\n]*                           { colNo += yyleng; return TOK_COMM; }
+\/\*[^*]*\*+([^/*][^*]*\*+)*\/       { colNo += yyleng; return TOK_COMM; }
 [0-9]+"."[0-9]+"f"              { colNo += yyleng; yylval.floatVal = atof(yytext); return CTZ; }  // Zecimal cu virgulă
-[0-9]+"."[0-9]+             { colNo += yyleng; yylval.doubleVal = atof(yytext); return CTR; }  // Real
-[0-9]+                     { colNo += yyleng; yylval.intVal = atoi(yytext); return CTI; }  // Intreg
-[a-zA-Z_][a-zA-Z0-9_]*      { colNo += yyleng; yylval.str=strdup(yytext); return ID; }
+[0-9]+"."[0-9]+                 { colNo += yyleng; yylval.doubleVal = atof(yytext); return CTR; }  // Real
+[0-9]+                          { colNo += yyleng; yylval.intVal = atoi(yytext); return CTI; }  // Intreg
+[a-zA-Z_][a-zA-Z0-9_]*          { colNo += yyleng; yylval.str=strdup(yytext); return ID; }
 \"[^\"]*\" {
     colNo += yyleng;
     yytext[yyleng - 1] = '\0';  // Remove trailing quote

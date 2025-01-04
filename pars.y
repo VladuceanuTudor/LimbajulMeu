@@ -23,6 +23,7 @@ int successRun = 1;
 %token TOK_PLUS TOK_MINUS TOK_MULT TOK_DIV 
 %token TOK_SEP TOK_OPARAN TOK_CPARAN TOK_ERR TOK_COMM
 %token <str>TXT
+%token TOK_LOWER TOK_GREATER TOK_EQUAL TOK_DIFFERENT TOK_LWEQ TOK_GREQ
 
 %type <doubleVal> E
 
@@ -68,21 +69,25 @@ D   : TOK_INTREG ID {
 P   : TOK_PROGR ID TOK_BEGIN Li TOK_END 
     ;
 
-Li  : Li I TOK_SEP
+Li  :
+    | Li TOK_COMM
+    | Li I TOK_SEP
     | I TOK_SEP
     ;
 
 I   : D
     | ID TOK_EQ E {
         Var* p = getVar($1);
-        if(!p)
-        {yyerror("Variabila nedeclarata!\n");
-        break;}
+        if(!p) {
+            yyerror("Variabila nedeclarata!\n");
+            break;
+        }
         p->val = $3;
     }
     | TOK_AFISEAZA PRINT
-    | TOK_CITESTE SCAN
+    | TOK_CITESTE SCAN 
     ;
+
 
 SCAN : SCAN ID      {
         Var* p = getVar($2);
@@ -176,6 +181,12 @@ E   : E TOK_PLUS E     {$$ = $1 + $3;}
             $$ = $1 / $3;
         }
     }
+    | E TOK_EQUAL E { $$ = $1 == $3}
+    | E TOK_GREATER E { $$ = $1 > $3}
+    | E TOK_LOWER E { $$ = $1 < $3}
+    | E TOK_GREQ E { $$ = $1 >= $3}
+    | E TOK_LWEQ E { $$ = $1 <= $3}
+    | E TOK_DIFFERENT E { $$ = $1 != $3}
     | CTI{$$=(double)$1;}
     | CTR
     | CTZ{$$=(double)$1;}

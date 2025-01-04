@@ -1,5 +1,5 @@
 interpreter: lex.l pars.y
-	bison -d pars.y
+	bison -dv pars.y
 	flex -o lex.yy.c lex.l
 	gcc pars.tab.c lex.yy.c -o interpreter -lfl
 
