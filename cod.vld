@@ -1,9 +1,10 @@
-begin 
+inceput 
 {
     intreg x = 10;
     real y = 3.14;
     zecimal z = 2.5f; x = x + 5;
-    citeste x y z;
+    citeste x y; 
+    citeste z;
     x = x/3;
     {
         intreg t =4;
@@ -13,8 +14,8 @@ begin
     
     //test comm
     /*afiseaza "\t";
-    cacat pe bat*/
+     miroase a zmeura*/
     
     afiseaza y "\n";
 } 
-end
+sfarsit
