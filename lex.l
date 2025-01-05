@@ -23,6 +23,8 @@ int lineNo = 1; // Prima linie începe de la 1
 "Daca"                      {colNo += yyleng; return TOK_Daca;}
 "atunci"                   { colNo += yyleng; return TOK_ATUNCI;}
 "altfel"                   {colNo += yyleng; return TOK_ALTFEL;}
+"cat timp"                  {colNo += yyleng; return TOK_WHILE;}
+"executa"                  {colNo += yyleng; return TOK_EXECUTE;}
 
 
 "+"                         { colNo++; return TOK_PLUS; }

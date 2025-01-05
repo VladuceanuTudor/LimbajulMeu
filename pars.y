@@ -4,21 +4,17 @@
 #include <string.h>
 #include "vars.h"
 #include "if.h"
-
-static int repeatToken = 0;  // Flag to indicate if we want to repeat the previous token
+#include "tokenBuff.h"
 
 // Declare yylex as normal, without the macro redefinition
 extern int yylex();
 
-// Define a function to manage repeating tokens
 int custom_yylex() {
-    if (repeatToken) {
-        // Return the previously stored token
-        return 281;  // Example: setting it to the value of TOK_RACC
+    if (tokenBuffSize>0) {
+        tokenBuffSize--;
+        return tokenBuff[tokenBuffSize+1];
     } else {
-        // Perform normal tokenization
         int token = yylex();
-        repeatToken = 0;  // Reset repeat flag after processing
         return token;
     }
 }
@@ -29,8 +25,8 @@ extern int yylex_destroy();
 int yyerror(char* msg);
 int skipToToken(int tokenToFind ,int tokenToIncrement);
 extern FILE* yyin;
-extern int lineNo;  // Declarația pentru variabila externă
-extern int colNo;   // Declarația pentru variabila externă
+extern int lineNo;  
+extern int colNo;   
 char msg[256];
 int successRun = 1;
 %}
@@ -47,6 +43,7 @@ int successRun = 1;
 %token <str>TXT
 %token TOK_LOWER TOK_GREATER TOK_EQUAL TOK_DIFFERENT TOK_LWEQ TOK_GREQ
 %token TOK_DACA TOK_ATUNCI TOK_ALTFEL TOK_Daca
+%token TOK_WHILE TOK_EXECUTE
 
 
 %type <doubleVal> E
@@ -115,7 +112,12 @@ IF_BLOCK : TOK_LACC{
        Li  TOK_RACC
       ;
 
+// WHILE_BLOCK : TOK_LACC{
+//     i
+// }
+
 Li  : 
+   // | Li TOK_WHILE E TOK_EXECUTE WHILE_BLOCK
     | Li TOK_DACA E TOK_ATUNCI {
             if($3) 
                 set_if(0);
@@ -124,14 +126,10 @@ Li  :
                 }
         } IF_BLOCK {
             //printf("%d", currentScopeLevel);
-            if(get_if()==0){
+            if(get_if()==0)
                 endScope();
-                //printf("%d", lineNo);
-            }else{
-                //printf("%d", lineNo);
-            }
+
             discard_if();
-            repeatToken=0;
         }
     |  Li TOK_Daca E TOK_ATUNCI{
              if($3) 
@@ -143,7 +141,6 @@ Li  :
             if(get_if()==0)
                 endScope();  
             discard_if();
-            repeatToken=0;
     } TOK_ALTFEL {
             if($3) 
                 set_if(1);
@@ -154,7 +151,6 @@ Li  :
             if(get_if()==0)
                 endScope();
             discard_if();
-            repeatToken=0;
     }
     ;
     | Li BLOCK
@@ -400,7 +396,7 @@ int skipToToken(int tokenToFind ,int tokenToIncrement) {
             // printf("%d ", yylex());
             // printf("%d ", yylex());
             // printf("%d ", yylex());
-            repeatToken=1;
+            pushToken(tokenToFind);
             return token;
         }else if(token == tokenToFind)counter--;
         //printf("%d", counter);
