@@ -20,6 +20,7 @@ int lineNo = 1; // Prima linie începe de la 1
 "sfarsit"                      {colNo += yyleng; return TOK_END; }
 "citeste"                  { colNo += yyleng; return TOK_CITESTE; }
 "daca"                     { colNo += yyleng; return TOK_DACA;}
+"Daca"                      {colNo += yyleng; return TOK_Daca;}
 "atunci"                   { colNo += yyleng; return TOK_ATUNCI;}
 "altfel"                   {colNo += yyleng; return TOK_ALTFEL;}
 

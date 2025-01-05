@@ -46,7 +46,7 @@ int successRun = 1;
 %token TOK_SEP TOK_OPARAN TOK_CPARAN TOK_ERR TOK_COMM TOK_LACC TOK_RACC
 %token <str>TXT
 %token TOK_LOWER TOK_GREATER TOK_EQUAL TOK_DIFFERENT TOK_LWEQ TOK_GREQ
-%token TOK_DACA TOK_ATUNCI TOK_ALTFEL
+%token TOK_DACA TOK_ATUNCI TOK_ALTFEL TOK_Daca
 
 
 %type <doubleVal> E
@@ -133,18 +133,29 @@ Li  :
             discard_if();
             repeatToken=0;
         }
-    // |  Li TOK_DACA E TOK_ATUNCI IF_BLOCK TOK_ALTFEL {
-    //         if($3) 
-    //             set_if(1);
-    //         else {
-    //             set_if(0);
-    //             }
-    // } IF_BLOCK {
-    //         if(get_if()==0)
-    //             endScope();
-    //         discard_if();
-    //         repeatToken=0;
-    // }
+    |  Li TOK_Daca E TOK_ATUNCI{
+             if($3) 
+                set_if(0);
+            else {
+                set_if(1);
+                }
+    } IF_BLOCK{
+            if(get_if()==0)
+                endScope();  
+            discard_if();
+            repeatToken=0;
+    } TOK_ALTFEL {
+            if($3) 
+                set_if(1);
+            else {
+                set_if(0);
+                }
+    } IF_BLOCK {
+            if(get_if()==0)
+                endScope();
+            discard_if();
+            repeatToken=0;
+    }
     ;
     | Li BLOCK
     | Li TOK_COMM
