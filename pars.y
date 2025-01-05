@@ -3,10 +3,31 @@
 #include <stdlib.h>
 #include <string.h>
 #include "vars.h"
+#include "if.h"
 
-int yylex();
+static int repeatToken = 0;  // Flag to indicate if we want to repeat the previous token
+
+// Declare yylex as normal, without the macro redefinition
+extern int yylex();
+
+// Define a function to manage repeating tokens
+int custom_yylex() {
+    if (repeatToken) {
+        // Return the previously stored token
+        return 281;  // Example: setting it to the value of TOK_RACC
+    } else {
+        // Perform normal tokenization
+        int token = yylex();
+        repeatToken = 0;  // Reset repeat flag after processing
+        return token;
+    }
+}
+
+// Update yylex calls to custom_yylex
+#define yylex custom_yylex
 extern int yylex_destroy();
 int yyerror(char* msg);
+int skipToToken(int tokenToFind ,int tokenToIncrement);
 extern FILE* yyin;
 extern int lineNo;  // Declarația pentru variabila externă
 extern int colNo;   // Declarația pentru variabila externă
@@ -32,6 +53,7 @@ int successRun = 1;
 
 %left TOK_PLUS TOK_MINUS 
 %left TOK_MULT TOK_DIV 
+
 
 %start START
 
@@ -69,18 +91,61 @@ D   : TOK_INTREG ID {
 }
     ;
 
-P   : TOK_BEGIN BLOCK TOK_END 
+P   : TOK_BEGIN BLOCK  
     ;
 
 BLOCK : TOK_LACC{
-            startScope();
+                startScope();
             }
        Li TOK_RACC {
-             endScope();
-      }
+                endScope();
+
+            }
+      ;
+IF_BLOCK : TOK_LACC{
+            
+            if (get_if()==1) {
+                //printf("%d", currentScopeLevel);
+                
+                skipToToken(TOK_RACC, TOK_LACC);
+            }else{
+                startScope();
+            }
+            }
+       Li  TOK_RACC
       ;
 
 Li  : 
+    | Li TOK_DACA E TOK_ATUNCI {
+            if($3) 
+                set_if(0);
+            else {
+                set_if(1);
+                }
+        } IF_BLOCK {
+            //printf("%d", currentScopeLevel);
+            if(get_if()==0){
+                endScope();
+                //printf("%d", lineNo);
+            }else{
+                //printf("%d", lineNo);
+            }
+            discard_if();
+            repeatToken=0;
+        }
+    // |  Li TOK_DACA E TOK_ATUNCI IF_BLOCK TOK_ALTFEL {
+    //         if($3) 
+    //             set_if(1);
+    //         else {
+    //             set_if(0);
+    //             }
+    // } IF_BLOCK {
+    //         if(get_if()==0)
+    //             endScope();
+    //         discard_if();
+    //         repeatToken=0;
+    // }
+    ;
     | Li BLOCK
     | Li TOK_COMM
     | Li I TOK_SEP
@@ -306,3 +371,30 @@ int yyerror(char* msg)
     return 1;
 }
 
+int skipToToken(int tokenToFind ,int tokenToIncrement) {
+    int token, prevToken;
+    int counter=0;
+    while ((token = yylex()) != 0) { 
+        //printf("%d ", token);
+        if(token == tokenToIncrement)counter++;
+        if (token == tokenToFind && counter==0) {
+            // ungetc(tokenToFind, yyin); 
+            // ungetc(TOK_RACC, yyin); 
+            // ungetc('}', yyin);
+            // ungetc(281, yyin);
+            // printf("%d ", TOK_RACC);
+            // printf("%d ", tokenToFind);
+            // printf("%d ", token);
+            // printf("%d ", yylex()); 
+            // printf("%d ", yylex());
+            // printf("%d ", yylex());
+            // printf("%d ", yylex());
+            repeatToken=1;
+            return token;
+        }else if(token == tokenToFind)counter--;
+        //printf("%d", counter);
+        prevToken =  token;
+    }
+    //yylex();
+    printf("Warning: Reached EOF without finding the token\n");
+}

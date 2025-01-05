@@ -16,7 +16,7 @@ int currentScopeLevel = 0;
 Var* getVar(char *nume){
     Var* p = headVar;
     while(p){
-        if(strcmp(p->nume, nume )==0 && currentScopeLevel <= p->scopeLvl)
+        if(strcmp(p->nume, nume )==0 && currentScopeLevel >= p->scopeLvl)
         return p;
         p = p->next;
     }
