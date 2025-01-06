@@ -1,0 +1,14 @@
+inceput 
+{
+    intreg var;
+    citeste var;
+    
+    cat timp var > 0 executa 
+    {
+        daca var < 100 atunci {afiseaza var " ";}
+        var = var - 1;
+        //afiseaza x " ";
+    }
+
+
+}

@@ -1,0 +1,21 @@
+nu emptyBuff 275 
+emptyBuff 281 
+emptyBuff 293 -while
+tokw=1 258 
+tokw=1 284 
+tokw=1 268 
+tokw=1 294 -executa
+tokw=1 280 
+tokw=1 266 
+tokw=1 258 
+12tokw=1 282 
+ tokw=1 275 
+tokw=1 258 
+tokw=1 262 
+tokw=1 258 
+tokw=1 272 
+tokw=1 268 
+tokw=1 275 
+tokw=1 281 
+tokw=0 293 -while
+tokw=1 279 

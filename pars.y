@@ -5,18 +5,73 @@
 #include "vars.h"
 #include "if.h"
 #include "tokenBuff.h"
+#include "pars.tab.h"
 
 // Declare yylex as normal, without the macro redefinition
 extern int yylex();
+extern char* yytext;
+//extern YYSTYPE yylval;
 
 int custom_yylex() {
-    if (tokenBuffSize>0) {
-        tokenBuffSize--;
-        return tokenBuff[tokenBuffSize+1];
+    int token;
+    // if(get_if()==1 && tok_while==3)
+    // return 281;
+    if (tokenBuffSize>0 && (tok_while==0 || tok_while == 3)) {
+        //printBuff(); 
+        token = getToken();
+        if(tok_while==3){
+            pushToken(token);
+            }
+        //printf("tokw=%d %d %d\n",tok_while, token, tokenBuffSize);
+        
+    } else if (tok_while==1||tok_while==2) {
+        token = yylex();
+        //printBuffTxt();
+        if(tok_while==1){
+            pushToken(293);
+            pushTxt("cat timp");
+            tok_while++;
+        }
+        pushToken(token);
+        pushTxt(yytext);
+        //printf("tokw=%d %d aici\n",tok_while, token);
     } else {
-        int token = yylex();
-        return token;
+        token = yylex();
+        //printf("tokw=%d %d \n",tok_while, token);
     }
+
+    if(tok_while==3){
+        // printf("\n");
+        // printBuff(); 
+        // printf("%d\n", tokenBuffSize);
+        // printBuffTxt();
+        // printf("%d\n", txtBuffSize);
+        char* txt = getTxt();
+        switch (token) {
+            case 258: // Identifier
+                yylval.str = strdup(txt); // Copy the identifier's name into yylval
+                //printf("%s", yytext);
+                break;
+            case 268: // Integer constant
+                yylval.intVal = atoi(txt); // Convert text to integer
+                break;
+            case 269: // Real constant
+                yylval.doubleVal = atof(txt); // Convert text to double
+                break;
+            case 270: // Real constant
+                yylval.floatVal = atof(txt); // Convert text to 
+                break;
+            case 282:
+                yylval.str = strdup(txt + 1);  // Skip leading quote
+                break;
+            default:
+                break;
+        }
+        // printf("\n%s\n", txt);
+        // printf("\n%d\n", token);
+        pushTxt(txt);
+    }
+    return token;
 }
 
 // Update yylex calls to custom_yylex
@@ -103,7 +158,7 @@ IF_BLOCK : TOK_LACC{
             
             if (get_if()==1) {
                 //printf("%d", currentScopeLevel);
-                
+                //printf("--%d--", tok_while);
                 skipToToken(TOK_RACC, TOK_LACC);
             }else{
                 startScope();
@@ -112,12 +167,25 @@ IF_BLOCK : TOK_LACC{
        Li  TOK_RACC
       ;
 
-// WHILE_BLOCK : TOK_LACC{
-//     i
-// }
-
 Li  : 
-   // | Li TOK_WHILE E TOK_EXECUTE WHILE_BLOCK
+    | Li WHILE_SETUP TOK_WHILE E TOK_EXECUTE {
+            if($4)
+                set_if(0);
+            else {
+                set_if(1);
+            }
+    
+    } IF_BLOCK {
+        if(get_if()==0){
+            tok_while=3;
+            }
+        else {
+            if(tok_while==3)endScope();
+            tok_while=0;
+            cleanBuff();
+            cleanBuffTxt();
+        }
+    }
     | Li TOK_DACA E TOK_ATUNCI {
             if($3) 
                 set_if(0);
@@ -159,7 +227,8 @@ Li  :
     | I TOK_SEP
     ;
 
-
+WHILE_SETUP : { if(tok_while==0)tok_while = 1; }
+;
 
 I   : D
     | ID TOK_EQ E {
@@ -375,6 +444,7 @@ int yyerror(char* msg)
 {
     printf("Error: %s at line %d, column %d\n", msg, lineNo, colNo);
     successRun=0;
+    exit(1);
     return 1;
 }
 
@@ -396,7 +466,18 @@ int skipToToken(int tokenToFind ,int tokenToIncrement) {
             // printf("%d ", yylex());
             // printf("%d ", yylex());
             // printf("%d ", yylex());
+            // printf("%d -while\n", TOK_WHILE);
+            // printf("%d -ececuta\n", TOK_EXECUTE);
+            // printf("%d >\n", TOK_GREATER);
+            // printf("%d -CTI\n", CTI);
+            // printf("%d -ID\n", ID);
+            // printf("%d -CTR\n", CTR);
+            // printf("%d -CTZ\n", CTZ);
+            //printf("%d -TXT\n", TXT);
+            cleanBuff();
+            //tok_while=0;
             pushToken(tokenToFind);
+            // if(tok_while)pushToken(tokenToFind);
             return token;
         }else if(token == tokenToFind)counter--;
         //printf("%d", counter);

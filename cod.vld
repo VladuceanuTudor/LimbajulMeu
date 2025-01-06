@@ -6,6 +6,7 @@ inceput
     citeste x y; 
     citeste z;
     //x = x/3;
+    x = x - 1;
     daca x > 3 atunci {
         daca y < 10 atunci { 
             intreg k=1; 
@@ -30,7 +31,16 @@ inceput
     /*afiseaza "\t";
      miroase a zmeura*/
     { 
-        afiseaza "nu"; 
+        afiseaza "nu "; 
     }
+
+    cat timp var > 0 executa 
+    {
+        daca var < 10 atunci {afiseaza var " ";}
+        var = var - 1;
+        //afiseaza x " ";
+    }
+
+
     //afiseaza y "\n";
 }
