@@ -6,6 +6,7 @@ typedef struct Var{
     char nume[20];
     double val;
     int scopeLvl;
+    int cast; // 1 - int; 2 - double; 3 -float
     int tip; // 1 - int; 2 - double; 3 -float
     struct Var* next;
 }Var;

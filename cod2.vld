@@ -10,5 +10,22 @@ inceput
         //afiseaza x " ";
     }
 
+    real x;
 
+    citeste x;
+    x = (intreg)x;
+
+    afiseaza "cast la intreg: " x;
+
+    afiseaza "\n";
+    afiseaza "citeste y: ";
+    intreg y;
+    citeste y;
+    x = (real)y/2;
+
+    afiseaza "cast la real: " x "\n";
+
+    x = (intreg)x/2;
+
+    afiseaza "cast la intreg: " x;
 }

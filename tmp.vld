@@ -1,1 +1,1 @@
-afiseaza "4";
+inceput { afiseaza "salut!"; }

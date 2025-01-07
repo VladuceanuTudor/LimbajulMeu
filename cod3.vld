@@ -1,0 +1,21 @@
+func test x y {
+    afiseaza x;
+    afiseaza " ";
+    /*daca y > 5 atunci {
+    afiseaza y;
+    }*/
+}
+
+inceput 
+{
+    intreg a;
+    intreg b=3;
+
+    citeste a;
+    b = (intreg)b;
+
+    afiseaza "cast la intreg: " b "\n";
+
+   apeleaza test a b;
+
+}

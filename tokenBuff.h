@@ -4,6 +4,15 @@ static int tokenBuff[100];
 static int tokenBuffSize=0;
 static int tok_while = 0;
 
+
+void pushTokenInFront(int tok){
+    tokenBuffSize++;
+    for(int i = tokenBuffSize; i>=2; i--){
+        tokenBuff[i]=tokenBuff[i-1];
+    }
+    tokenBuff[1]=tok;
+}
+
 void pushToken(int tok){
     tokenBuffSize++;
     tokenBuff[tokenBuffSize]=tok;
@@ -42,6 +51,14 @@ char * getTxt(){
     return name;
 }
 
+void pushTxtInFront(char* tok){
+    txtBuffSize++;
+    for(int i = txtBuffSize; i>=2; i--){
+        strcpy(txtBuff[i],txtBuff[i-1]);
+    }
+    strcpy(txtBuff[1],tok);
+}
+
 void printBuffTxt(){
     for (int i =1 ; i<=txtBuffSize; i++)
     printf("t%st ", txtBuff[i]);
@@ -51,3 +68,4 @@ void printBuffTxt(){
 void cleanBuffTxt(){
     txtBuffSize=0;
 }
+

@@ -17,3 +17,4 @@ int discard_if(){
     if_count--;
 }
 
+static int ok_while=0;

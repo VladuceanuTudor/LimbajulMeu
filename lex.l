@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 int colNo = 0;
-int lineNo = 1; // Prima linie începe de la 1
+int lineNo = 1; 
 %}
 
 %option noyywrap
@@ -25,6 +25,11 @@ int lineNo = 1; // Prima linie începe de la 1
 "altfel"                   {colNo += yyleng; return TOK_ALTFEL;}
 "cat timp"                  {colNo += yyleng; return TOK_WHILE;}
 "executa"                  {colNo += yyleng; return TOK_EXECUTE;}
+"(intreg)"                  { colNo += yyleng; return TOK_CAST_INTREG; }
+"(real)"                  { colNo += yyleng; return TOK_CAST_REAL; }
+"(zecimal)"                  { colNo += yyleng; return TOK_CAST_ZECIMAL; }
+"func"                      { colNo += yyleng; return TOK_FUNC; }
+"apeleaza"                  { colNo += yyleng; return TOK_CALL; }
 
 
 "+"                         { colNo++; return TOK_PLUS; }
@@ -46,14 +51,14 @@ int lineNo = 1; // Prima linie începe de la 1
 
 "//"[^\n]*                           { colNo += yyleng; return TOK_COMM; }
 \/\*[^*]*\*+([^/*][^*]*\*+)*\/       { colNo += yyleng; return TOK_COMM; }
-[0-9]+"."[0-9]+"f"              { colNo += yyleng; yylval.floatVal = atof(yytext); return CTZ; }  // Zecimal cu virgulă
+[0-9]+"."[0-9]+"f"              { colNo += yyleng; yylval.floatVal = atof(yytext); return CTZ; }  // Zecimal cu virgula
 [0-9]+"."[0-9]+                 { colNo += yyleng; yylval.doubleVal = atof(yytext); return CTR; }  // Real
 [0-9]+                          { colNo += yyleng; yylval.intVal = atoi(yytext); return CTI; }  // Intreg
 [a-zA-Z_][a-zA-Z0-9_]*          { colNo += yyleng; yylval.str=strdup(yytext); return ID; }
 \"[^\"]*\" {
     colNo += yyleng;
-    yytext[yyleng - 1] = '\0';  // Remove trailing quote
-    yylval.str = strdup(yytext + 1);  // Skip leading quote
+    yytext[yyleng - 1] = '\0';  
+    yylval.str = strdup(yytext + 1);  
     return TXT;
 }
 

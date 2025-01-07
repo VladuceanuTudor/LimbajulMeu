@@ -36,7 +36,7 @@ inceput
 
     cat timp var > 0 executa 
     {
-        daca var < 10 atunci {afiseaza var " ";}
+        afiseaza var " ";
         var = var - 1;
         //afiseaza x " ";
     }

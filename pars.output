@@ -6,18 +6,25 @@ Terminals unused in grammar
     TOK_CPARAN
 
 
-State 24 conflicts: 6 shift/reduce
-State 74 conflicts: 6 shift/reduce
-State 75 conflicts: 6 shift/reduce
-State 76 conflicts: 6 shift/reduce
-State 77 conflicts: 6 shift/reduce
-State 78 conflicts: 10 shift/reduce
-State 79 conflicts: 10 shift/reduce
-State 80 conflicts: 10 shift/reduce
-State 81 conflicts: 10 shift/reduce
-State 82 conflicts: 10 shift/reduce
-State 83 conflicts: 10 shift/reduce
-State 91 conflicts: 6 shift/reduce
+State 0 conflicts: 1 shift/reduce
+State 6 conflicts: 1 shift/reduce
+State 8 conflicts: 1 shift/reduce
+State 27 conflicts: 7 shift/reduce
+State 58 conflicts: 1 shift/reduce
+State 94 conflicts: 1 shift/reduce, 13 reduce/reduce
+State 95 conflicts: 6 shift/reduce
+State 96 conflicts: 6 shift/reduce
+State 97 conflicts: 6 shift/reduce
+State 98 conflicts: 6 shift/reduce
+State 99 conflicts: 1 shift/reduce, 13 reduce/reduce
+State 100 conflicts: 6 shift/reduce
+State 101 conflicts: 10 shift/reduce
+State 102 conflicts: 10 shift/reduce
+State 103 conflicts: 10 shift/reduce
+State 104 conflicts: 10 shift/reduce
+State 105 conflicts: 10 shift/reduce
+State 106 conflicts: 10 shift/reduce
+State 114 conflicts: 7 shift/reduce
 
 
 Grammar
@@ -42,175 +49,212 @@ Grammar
    13  | TOK_ZECIMAL ID TOK_EQ CTZ
 
    14 P: TOK_BEGIN BLOCK
+   15  | FUNC TOK_BEGIN BLOCK
 
-   15 $@1: ε
+   16 FUNC: ε
 
-   16 BLOCK: TOK_LACC $@1 Li TOK_RACC
+   17 $@1: ε
 
-   17 $@2: ε
+   18 FUNC: FUNC TOK_FUNC ID $@1 PARAMS TOK_LACC
 
-   18 IF_BLOCK: TOK_LACC $@2 Li TOK_RACC
+   19 PARAMS: ε
+   20       | PARAMS ID
 
-   19 Li: ε
+   21 PARAMS_APEL: ε
+   22            | PARAMS_APEL ID
 
-   20 $@3: ε
+   23 $@2: ε
 
-   21 Li: Li WHILE_SETUP TOK_WHILE E TOK_EXECUTE $@3 IF_BLOCK
+   24 BLOCK: TOK_LACC $@2 Li TOK_RACC
 
-   22 $@4: ε
+   25 $@3: ε
 
-   23 Li: Li TOK_DACA E TOK_ATUNCI $@4 IF_BLOCK
+   26 IF_BLOCK: TOK_LACC $@3 Li TOK_RACC
 
-   24 $@5: ε
+   27 Li: ε
 
-   25 $@6: ε
+   28 $@4: ε
 
-   26 $@7: ε
+   29 Li: Li WHILE_SETUP TOK_WHILE E TOK_EXECUTE $@4 IF_BLOCK
 
-   27 Li: Li TOK_Daca E TOK_ATUNCI $@5 IF_BLOCK $@6 TOK_ALTFEL $@7 IF_BLOCK
-   28   | Li BLOCK
-   29   | Li TOK_COMM
-   30   | Li I TOK_SEP
-   31   | I TOK_SEP
+   30 $@5: ε
 
-   32 WHILE_SETUP: ε
+   31 Li: Li TOK_DACA E TOK_ATUNCI $@5 IF_BLOCK
 
-   33 I: D
-   34  | ID TOK_EQ E
-   35  | TOK_AFISEAZA PRINT
-   36  | TOK_CITESTE SCAN
+   32 $@6: ε
 
-   37 SCAN: SCAN ID
-   38     | ID
+   33 $@7: ε
 
-   39 PRINT: PRINT ID
-   40      | PRINT TXT
-   41      | ID
-   42      | TXT
+   34 $@8: ε
 
-   43 E: E TOK_PLUS E
-   44  | E TOK_MINUS E
-   45  | E TOK_MULT E
-   46  | E TOK_DIV E
-   47  | E TOK_EQUAL E
-   48  | E TOK_GREATER E
-   49  | E TOK_LOWER E
-   50  | E TOK_GREQ E
-   51  | E TOK_LWEQ E
-   52  | E TOK_DIFFERENT E
-   53  | CTI
-   54  | CTR
-   55  | CTZ
-   56  | ID
+   35 Li: Li TOK_Daca E TOK_ATUNCI $@6 IF_BLOCK $@7 TOK_ALTFEL $@8 IF_BLOCK
+   36   | Li BLOCK
+   37   | Li TOK_COMM
+   38   | Li I TOK_SEP
+   39   | I TOK_SEP
+
+   40 WHILE_SETUP: ε
+
+   41 I: D
+   42  | TOK_CALL ID PARAMS_APEL
+   43  | ID TOK_EQ E
+   44  | TOK_AFISEAZA PRINT
+   45  | TOK_CITESTE SCAN
+
+   46 SCAN: SCAN ID
+   47     | ID
+
+   48 PRINT: PRINT ID
+   49      | PRINT TXT
+   50      | ID
+   51      | TXT
+
+   52 E: E TOK_PLUS E
+   53  | E TOK_MINUS E
+   54  | E TOK_MULT E
+   55  | E TOK_DIV E
+   56  | ID TOK_DIV E
+   57  | E TOK_DIV ID
+   58  | ID TOK_DIV ID
+   59  | E TOK_EQUAL E
+   60  | E TOK_GREATER E
+   61  | E TOK_LOWER E
+   62  | E TOK_GREQ E
+   63  | E TOK_LWEQ E
+   64  | E TOK_DIFFERENT E
+   65  | TOK_CAST_INTREG ID
+   66  | TOK_CAST_REAL ID
+   67  | TOK_CAST_ZECIMAL ID
+   68  | CTI
+   69  | CTR
+   70  | CTZ
+   71  | ID
 
 
 Terminals, with rules where they appear
 
     $end (0) 0
     error (256)
-    ID <str> (258) 8 9 10 11 12 13 34 37 38 39 41 56
+    ID <str> (258) 8 9 10 11 12 13 18 20 22 42 43 46 47 48 50 56 57 58 65 66 67 71
     TOK_INTREG (259) 8 9
     TOK_REAL (260) 10 11
     TOK_ZECIMAL (261) 12 13
-    TOK_EQ (262) 9 11 13 34
-    TOK_BEGIN (263) 14
+    TOK_EQ (262) 9 11 13 43
+    TOK_BEGIN (263) 14 15
     TOK_END (264)
     TOK_PROGR (265)
-    TOK_AFISEAZA (266) 35
-    TOK_CITESTE (267) 36
-    CTI <intVal> (268) 9 53
-    CTR <doubleVal> (269) 11 54
-    CTZ <floatVal> (270) 13 55
-    TOK_PLUS (271) 43
-    TOK_MINUS (272) 44
-    TOK_MULT (273) 45
-    TOK_DIV (274) 46
-    TOK_SEP (275) 6 7 30 31
+    TOK_AFISEAZA (266) 44
+    TOK_CITESTE (267) 45
+    CTI <intVal> (268) 9 68
+    CTR <doubleVal> (269) 11 69
+    CTZ <floatVal> (270) 13 70
+    TOK_PLUS (271) 52
+    TOK_MINUS (272) 53
+    TOK_MULT (273) 54
+    TOK_DIV (274) 55 56 57 58
+    TOK_SEP (275) 6 7 38 39
     TOK_OPARAN (276)
     TOK_CPARAN (277)
     TOK_ERR (278) 5
-    TOK_COMM (279) 29
-    TOK_LACC (280) 16 18
-    TOK_RACC (281) 16 18
-    TXT <str> (282) 40 42
-    TOK_LOWER (283) 49
-    TOK_GREATER (284) 48
-    TOK_EQUAL (285) 47
-    TOK_DIFFERENT (286) 52
-    TOK_LWEQ (287) 51
-    TOK_GREQ (288) 50
-    TOK_DACA (289) 23
-    TOK_ATUNCI (290) 23 27
-    TOK_ALTFEL (291) 27
-    TOK_Daca (292) 27
-    TOK_WHILE (293) 21
-    TOK_EXECUTE (294) 21
+    TOK_COMM (279) 37
+    TOK_LACC (280) 18 24 26
+    TOK_RACC (281) 24 26
+    TXT <str> (282) 49 51
+    TOK_LOWER (283) 61
+    TOK_GREATER (284) 60
+    TOK_EQUAL (285) 59
+    TOK_DIFFERENT (286) 64
+    TOK_LWEQ (287) 63
+    TOK_GREQ (288) 62
+    TOK_DACA (289) 31
+    TOK_ATUNCI (290) 31 35
+    TOK_ALTFEL (291) 35
+    TOK_Daca (292) 35
+    TOK_WHILE (293) 29
+    TOK_EXECUTE (294) 29
+    TOK_CAST_INTREG (295) 65
+    TOK_CAST_REAL (296) 66
+    TOK_CAST_ZECIMAL (297) 67
+    TOK_FUNC (298) 18
+    TOK_CALL (299) 42
 
 
 Nonterminals, with rules where they appear
 
-    $accept (40)
+    $accept (45)
         on left: 0
-    START (41)
+    START (46)
         on left: 1 2
         on right: 0 2
-    S (42)
+    S (47)
         on left: 3 4 5
         on right: 1 2
-    Lg (43)
+    Lg (48)
         on left: 6 7
         on right: 3 6
-    D (44)
+    D (49)
         on left: 8 9 10 11 12 13
-        on right: 6 7 33
-    P (45)
-        on left: 14
+        on right: 6 7 41
+    P (50)
+        on left: 14 15
         on right: 3 4
-    BLOCK (46)
-        on left: 16
-        on right: 14 28
-    $@1 (47)
-        on left: 15
-        on right: 16
-    IF_BLOCK (48)
-        on left: 18
-        on right: 21 23 27
-    $@2 (49)
+    FUNC (51)
+        on left: 16 18
+        on right: 15 18
+    $@1 (52)
         on left: 17
         on right: 18
-    Li (50)
-        on left: 19 21 23 27 28 29 30 31
-        on right: 16 18 21 23 27 28 29 30
-    $@3 (51)
-        on left: 20
-        on right: 21
-    $@4 (52)
-        on left: 22
-        on right: 23
-    $@5 (53)
+    PARAMS (53)
+        on left: 19 20
+        on right: 18 20
+    PARAMS_APEL (54)
+        on left: 21 22
+        on right: 22 42
+    BLOCK (55)
         on left: 24
-        on right: 27
-    $@6 (54)
-        on left: 25
-        on right: 27
-    $@7 (55)
+        on right: 14 15 36
+    $@2 (56)
+        on left: 23
+        on right: 24
+    IF_BLOCK (57)
         on left: 26
-        on right: 27
-    WHILE_SETUP (56)
+        on right: 29 31 35
+    $@3 (58)
+        on left: 25
+        on right: 26
+    Li (59)
+        on left: 27 29 31 35 36 37 38 39
+        on right: 24 26 29 31 35 36 37 38
+    $@4 (60)
+        on left: 28
+        on right: 29
+    $@5 (61)
+        on left: 30
+        on right: 31
+    $@6 (62)
         on left: 32
-        on right: 21
-    I (57)
-        on left: 33 34 35 36
-        on right: 30 31
-    SCAN (58)
-        on left: 37 38
-        on right: 36 37
-    PRINT (59)
-        on left: 39 40 41 42
-        on right: 35 39 40
-    E <doubleVal> (60)
-        on left: 43 44 45 46 47 48 49 50 51 52 53 54 55 56
-        on right: 21 23 27 34 43 44 45 46 47 48 49 50 51 52
+        on right: 35
+    $@7 (63)
+        on left: 33
+        on right: 35
+    $@8 (64)
+        on left: 34
+        on right: 35
+    WHILE_SETUP (65)
+        on left: 40
+        on right: 29
+    I (66)
+        on left: 41 42 43 44 45
+        on right: 38 39
+    SCAN (67)
+        on left: 46 47
+        on right: 45 46
+    PRINT (68)
+        on left: 48 49 50 51
+        on right: 44 48 49
+    E <doubleVal> (69)
+        on left: 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71
+        on right: 29 31 35 43 52 53 54 55 56 57 59 60 61 62 63 64
 
 
 State 0
@@ -223,11 +267,15 @@ State 0
     TOK_BEGIN    shift, and go to state 4
     TOK_ERR      shift, and go to state 5
 
+    TOK_BEGIN  [reduce using rule 16 (FUNC)]
+    $default   reduce using rule 16 (FUNC)
+
     START  go to state 6
     S      go to state 7
     Lg     go to state 8
     D      go to state 9
     P      go to state 10
+    FUNC   go to state 11
 
 
 State 1
@@ -235,7 +283,7 @@ State 1
     8 D: TOK_INTREG • ID
     9  | TOK_INTREG • ID TOK_EQ CTI
 
-    ID  shift, and go to state 11
+    ID  shift, and go to state 12
 
 
 State 2
@@ -243,7 +291,7 @@ State 2
    10 D: TOK_REAL • ID
    11  | TOK_REAL • ID TOK_EQ CTR
 
-    ID  shift, and go to state 12
+    ID  shift, and go to state 13
 
 
 State 3
@@ -251,16 +299,16 @@ State 3
    12 D: TOK_ZECIMAL • ID
    13  | TOK_ZECIMAL • ID TOK_EQ CTZ
 
-    ID  shift, and go to state 13
+    ID  shift, and go to state 14
 
 
 State 4
 
    14 P: TOK_BEGIN • BLOCK
 
-    TOK_LACC  shift, and go to state 14
+    TOK_LACC  shift, and go to state 15
 
-    BLOCK  go to state 15
+    BLOCK  go to state 16
 
 
 State 5
@@ -275,17 +323,21 @@ State 6
     0 $accept: START • $end
     2 START: START • S
 
-    $end         shift, and go to state 16
+    $end         shift, and go to state 17
     TOK_INTREG   shift, and go to state 1
     TOK_REAL     shift, and go to state 2
     TOK_ZECIMAL  shift, and go to state 3
     TOK_BEGIN    shift, and go to state 4
     TOK_ERR      shift, and go to state 5
 
-    S   go to state 17
-    Lg  go to state 8
-    D   go to state 9
-    P   go to state 10
+    TOK_BEGIN  [reduce using rule 16 (FUNC)]
+    $default   reduce using rule 16 (FUNC)
+
+    S     go to state 18
+    Lg    go to state 8
+    D     go to state 9
+    P     go to state 10
+    FUNC  go to state 11
 
 
 State 7
@@ -305,15 +357,19 @@ State 8
     TOK_ZECIMAL  shift, and go to state 3
     TOK_BEGIN    shift, and go to state 4
 
-    D  go to state 18
-    P  go to state 19
+    TOK_BEGIN  [reduce using rule 16 (FUNC)]
+    $default   reduce using rule 16 (FUNC)
+
+    D     go to state 19
+    P     go to state 20
+    FUNC  go to state 11
 
 
 State 9
 
     7 Lg: D • TOK_SEP
 
-    TOK_SEP  shift, and go to state 20
+    TOK_SEP  shift, and go to state 21
 
 
 State 10
@@ -325,931 +381,976 @@ State 10
 
 State 11
 
-    8 D: TOK_INTREG ID •
-    9  | TOK_INTREG ID • TOK_EQ CTI
+   15 P: FUNC • TOK_BEGIN BLOCK
+   18 FUNC: FUNC • TOK_FUNC ID $@1 PARAMS TOK_LACC
 
-    TOK_EQ  shift, and go to state 21
-
-    $default  reduce using rule 8 (D)
+    TOK_BEGIN  shift, and go to state 22
+    TOK_FUNC   shift, and go to state 23
 
 
 State 12
 
-   10 D: TOK_REAL ID •
-   11  | TOK_REAL ID • TOK_EQ CTR
+    8 D: TOK_INTREG ID •
+    9  | TOK_INTREG ID • TOK_EQ CTI
 
-    TOK_EQ  shift, and go to state 22
+    TOK_EQ  shift, and go to state 24
 
-    $default  reduce using rule 10 (D)
+    $default  reduce using rule 8 (D)
 
 
 State 13
 
-   12 D: TOK_ZECIMAL ID •
-   13  | TOK_ZECIMAL ID • TOK_EQ CTZ
+   10 D: TOK_REAL ID •
+   11  | TOK_REAL ID • TOK_EQ CTR
 
-    TOK_EQ  shift, and go to state 23
+    TOK_EQ  shift, and go to state 25
 
-    $default  reduce using rule 12 (D)
+    $default  reduce using rule 10 (D)
 
 
 State 14
 
-   16 BLOCK: TOK_LACC • $@1 Li TOK_RACC
+   12 D: TOK_ZECIMAL ID •
+   13  | TOK_ZECIMAL ID • TOK_EQ CTZ
 
-    $default  reduce using rule 15 ($@1)
+    TOK_EQ  shift, and go to state 26
 
-    $@1  go to state 24
+    $default  reduce using rule 12 (D)
 
 
 State 15
+
+   24 BLOCK: TOK_LACC • $@2 Li TOK_RACC
+
+    $default  reduce using rule 23 ($@2)
+
+    $@2  go to state 27
+
+
+State 16
 
    14 P: TOK_BEGIN BLOCK •
 
     $default  reduce using rule 14 (P)
 
 
-State 16
+State 17
 
     0 $accept: START $end •
 
     $default  accept
 
 
-State 17
+State 18
 
     2 START: START S •
 
     $default  reduce using rule 2 (START)
 
 
-State 18
+State 19
 
     6 Lg: Lg D • TOK_SEP
 
-    TOK_SEP  shift, and go to state 25
+    TOK_SEP  shift, and go to state 28
 
 
-State 19
+State 20
 
     3 S: Lg P •
 
     $default  reduce using rule 3 (S)
 
 
-State 20
+State 21
 
     7 Lg: D TOK_SEP •
 
     $default  reduce using rule 7 (Lg)
 
 
-State 21
-
-    9 D: TOK_INTREG ID TOK_EQ • CTI
-
-    CTI  shift, and go to state 26
-
-
 State 22
 
-   11 D: TOK_REAL ID TOK_EQ • CTR
+   15 P: FUNC TOK_BEGIN • BLOCK
 
-    CTR  shift, and go to state 27
+    TOK_LACC  shift, and go to state 15
+
+    BLOCK  go to state 29
 
 
 State 23
 
-   13 D: TOK_ZECIMAL ID TOK_EQ • CTZ
+   18 FUNC: FUNC TOK_FUNC • ID $@1 PARAMS TOK_LACC
 
-    CTZ  shift, and go to state 28
+    ID  shift, and go to state 30
 
 
 State 24
 
-   16 BLOCK: TOK_LACC $@1 • Li TOK_RACC
+    9 D: TOK_INTREG ID TOK_EQ • CTI
 
-    ID            shift, and go to state 29
-    TOK_INTREG    shift, and go to state 1
-    TOK_REAL      shift, and go to state 2
-    TOK_ZECIMAL   shift, and go to state 3
-    TOK_AFISEAZA  shift, and go to state 30
-    TOK_CITESTE   shift, and go to state 31
-
-    ID            [reduce using rule 19 (Li)]
-    TOK_INTREG    [reduce using rule 19 (Li)]
-    TOK_REAL      [reduce using rule 19 (Li)]
-    TOK_ZECIMAL   [reduce using rule 19 (Li)]
-    TOK_AFISEAZA  [reduce using rule 19 (Li)]
-    TOK_CITESTE   [reduce using rule 19 (Li)]
-    $default      reduce using rule 19 (Li)
-
-    D   go to state 32
-    Li  go to state 33
-    I   go to state 34
+    CTI  shift, and go to state 31
 
 
 State 25
+
+   11 D: TOK_REAL ID TOK_EQ • CTR
+
+    CTR  shift, and go to state 32
+
+
+State 26
+
+   13 D: TOK_ZECIMAL ID TOK_EQ • CTZ
+
+    CTZ  shift, and go to state 33
+
+
+State 27
+
+   24 BLOCK: TOK_LACC $@2 • Li TOK_RACC
+
+    ID            shift, and go to state 34
+    TOK_INTREG    shift, and go to state 1
+    TOK_REAL      shift, and go to state 2
+    TOK_ZECIMAL   shift, and go to state 3
+    TOK_AFISEAZA  shift, and go to state 35
+    TOK_CITESTE   shift, and go to state 36
+    TOK_CALL      shift, and go to state 37
+
+    ID            [reduce using rule 27 (Li)]
+    TOK_INTREG    [reduce using rule 27 (Li)]
+    TOK_REAL      [reduce using rule 27 (Li)]
+    TOK_ZECIMAL   [reduce using rule 27 (Li)]
+    TOK_AFISEAZA  [reduce using rule 27 (Li)]
+    TOK_CITESTE   [reduce using rule 27 (Li)]
+    TOK_CALL      [reduce using rule 27 (Li)]
+    $default      reduce using rule 27 (Li)
+
+    D   go to state 38
+    Li  go to state 39
+    I   go to state 40
+
+
+State 28
 
     6 Lg: Lg D TOK_SEP •
 
     $default  reduce using rule 6 (Lg)
 
 
-State 26
+State 29
+
+   15 P: FUNC TOK_BEGIN BLOCK •
+
+    $default  reduce using rule 15 (P)
+
+
+State 30
+
+   18 FUNC: FUNC TOK_FUNC ID • $@1 PARAMS TOK_LACC
+
+    $default  reduce using rule 17 ($@1)
+
+    $@1  go to state 41
+
+
+State 31
 
     9 D: TOK_INTREG ID TOK_EQ CTI •
 
     $default  reduce using rule 9 (D)
 
 
-State 27
+State 32
 
    11 D: TOK_REAL ID TOK_EQ CTR •
 
     $default  reduce using rule 11 (D)
 
 
-State 28
+State 33
 
    13 D: TOK_ZECIMAL ID TOK_EQ CTZ •
 
     $default  reduce using rule 13 (D)
 
 
-State 29
-
-   34 I: ID • TOK_EQ E
-
-    TOK_EQ  shift, and go to state 35
-
-
-State 30
-
-   35 I: TOK_AFISEAZA • PRINT
-
-    ID   shift, and go to state 36
-    TXT  shift, and go to state 37
-
-    PRINT  go to state 38
-
-
-State 31
-
-   36 I: TOK_CITESTE • SCAN
-
-    ID  shift, and go to state 39
-
-    SCAN  go to state 40
-
-
-State 32
-
-   33 I: D •
-
-    $default  reduce using rule 33 (I)
-
-
-State 33
-
-   16 BLOCK: TOK_LACC $@1 Li • TOK_RACC
-   21 Li: Li • WHILE_SETUP TOK_WHILE E TOK_EXECUTE $@3 IF_BLOCK
-   23   | Li • TOK_DACA E TOK_ATUNCI $@4 IF_BLOCK
-   27   | Li • TOK_Daca E TOK_ATUNCI $@5 IF_BLOCK $@6 TOK_ALTFEL $@7 IF_BLOCK
-   28   | Li • BLOCK
-   29   | Li • TOK_COMM
-   30   | Li • I TOK_SEP
-
-    ID            shift, and go to state 29
-    TOK_INTREG    shift, and go to state 1
-    TOK_REAL      shift, and go to state 2
-    TOK_ZECIMAL   shift, and go to state 3
-    TOK_AFISEAZA  shift, and go to state 30
-    TOK_CITESTE   shift, and go to state 31
-    TOK_COMM      shift, and go to state 41
-    TOK_LACC      shift, and go to state 14
-    TOK_RACC      shift, and go to state 42
-    TOK_DACA      shift, and go to state 43
-    TOK_Daca      shift, and go to state 44
-
-    $default  reduce using rule 32 (WHILE_SETUP)
-
-    D            go to state 32
-    BLOCK        go to state 45
-    WHILE_SETUP  go to state 46
-    I            go to state 47
-
-
 State 34
 
-   31 Li: I • TOK_SEP
+   43 I: ID • TOK_EQ E
 
-    TOK_SEP  shift, and go to state 48
+    TOK_EQ  shift, and go to state 42
 
 
 State 35
 
-   34 I: ID TOK_EQ • E
+   44 I: TOK_AFISEAZA • PRINT
 
-    ID   shift, and go to state 49
-    CTI  shift, and go to state 50
-    CTR  shift, and go to state 51
-    CTZ  shift, and go to state 52
+    ID   shift, and go to state 43
+    TXT  shift, and go to state 44
 
-    E  go to state 53
+    PRINT  go to state 45
 
 
 State 36
 
-   41 PRINT: ID •
+   45 I: TOK_CITESTE • SCAN
 
-    $default  reduce using rule 41 (PRINT)
+    ID  shift, and go to state 46
+
+    SCAN  go to state 47
 
 
 State 37
 
-   42 PRINT: TXT •
+   42 I: TOK_CALL • ID PARAMS_APEL
 
-    $default  reduce using rule 42 (PRINT)
+    ID  shift, and go to state 48
 
 
 State 38
 
-   35 I: TOK_AFISEAZA PRINT •
-   39 PRINT: PRINT • ID
-   40      | PRINT • TXT
+   41 I: D •
 
-    ID   shift, and go to state 54
-    TXT  shift, and go to state 55
-
-    $default  reduce using rule 35 (I)
+    $default  reduce using rule 41 (I)
 
 
 State 39
 
-   38 SCAN: ID •
+   24 BLOCK: TOK_LACC $@2 Li • TOK_RACC
+   29 Li: Li • WHILE_SETUP TOK_WHILE E TOK_EXECUTE $@4 IF_BLOCK
+   31   | Li • TOK_DACA E TOK_ATUNCI $@5 IF_BLOCK
+   35   | Li • TOK_Daca E TOK_ATUNCI $@6 IF_BLOCK $@7 TOK_ALTFEL $@8 IF_BLOCK
+   36   | Li • BLOCK
+   37   | Li • TOK_COMM
+   38   | Li • I TOK_SEP
 
-    $default  reduce using rule 38 (SCAN)
+    ID            shift, and go to state 34
+    TOK_INTREG    shift, and go to state 1
+    TOK_REAL      shift, and go to state 2
+    TOK_ZECIMAL   shift, and go to state 3
+    TOK_AFISEAZA  shift, and go to state 35
+    TOK_CITESTE   shift, and go to state 36
+    TOK_COMM      shift, and go to state 49
+    TOK_LACC      shift, and go to state 15
+    TOK_RACC      shift, and go to state 50
+    TOK_DACA      shift, and go to state 51
+    TOK_Daca      shift, and go to state 52
+    TOK_CALL      shift, and go to state 37
+
+    $default  reduce using rule 40 (WHILE_SETUP)
+
+    D            go to state 38
+    BLOCK        go to state 53
+    WHILE_SETUP  go to state 54
+    I            go to state 55
 
 
 State 40
 
-   36 I: TOK_CITESTE SCAN •
-   37 SCAN: SCAN • ID
+   39 Li: I • TOK_SEP
 
-    ID  shift, and go to state 56
-
-    $default  reduce using rule 36 (I)
+    TOK_SEP  shift, and go to state 56
 
 
 State 41
 
-   29 Li: Li TOK_COMM •
+   18 FUNC: FUNC TOK_FUNC ID $@1 • PARAMS TOK_LACC
 
-    $default  reduce using rule 29 (Li)
+    $default  reduce using rule 19 (PARAMS)
+
+    PARAMS  go to state 57
 
 
 State 42
 
-   16 BLOCK: TOK_LACC $@1 Li TOK_RACC •
+   43 I: ID TOK_EQ • E
 
-    $default  reduce using rule 16 (BLOCK)
+    ID                shift, and go to state 58
+    CTI               shift, and go to state 59
+    CTR               shift, and go to state 60
+    CTZ               shift, and go to state 61
+    TOK_CAST_INTREG   shift, and go to state 62
+    TOK_CAST_REAL     shift, and go to state 63
+    TOK_CAST_ZECIMAL  shift, and go to state 64
+
+    E  go to state 65
 
 
 State 43
 
-   23 Li: Li TOK_DACA • E TOK_ATUNCI $@4 IF_BLOCK
+   50 PRINT: ID •
 
-    ID   shift, and go to state 49
-    CTI  shift, and go to state 50
-    CTR  shift, and go to state 51
-    CTZ  shift, and go to state 52
-
-    E  go to state 57
+    $default  reduce using rule 50 (PRINT)
 
 
 State 44
 
-   27 Li: Li TOK_Daca • E TOK_ATUNCI $@5 IF_BLOCK $@6 TOK_ALTFEL $@7 IF_BLOCK
+   51 PRINT: TXT •
 
-    ID   shift, and go to state 49
-    CTI  shift, and go to state 50
-    CTR  shift, and go to state 51
-    CTZ  shift, and go to state 52
-
-    E  go to state 58
+    $default  reduce using rule 51 (PRINT)
 
 
 State 45
 
-   28 Li: Li BLOCK •
+   44 I: TOK_AFISEAZA PRINT •
+   48 PRINT: PRINT • ID
+   49      | PRINT • TXT
 
-    $default  reduce using rule 28 (Li)
+    ID   shift, and go to state 66
+    TXT  shift, and go to state 67
+
+    $default  reduce using rule 44 (I)
 
 
 State 46
 
-   21 Li: Li WHILE_SETUP • TOK_WHILE E TOK_EXECUTE $@3 IF_BLOCK
+   47 SCAN: ID •
 
-    TOK_WHILE  shift, and go to state 59
+    $default  reduce using rule 47 (SCAN)
 
 
 State 47
 
-   30 Li: Li I • TOK_SEP
+   45 I: TOK_CITESTE SCAN •
+   46 SCAN: SCAN • ID
 
-    TOK_SEP  shift, and go to state 60
+    ID  shift, and go to state 68
+
+    $default  reduce using rule 45 (I)
 
 
 State 48
 
-   31 Li: I TOK_SEP •
+   42 I: TOK_CALL ID • PARAMS_APEL
 
-    $default  reduce using rule 31 (Li)
+    $default  reduce using rule 21 (PARAMS_APEL)
+
+    PARAMS_APEL  go to state 69
 
 
 State 49
 
-   56 E: ID •
+   37 Li: Li TOK_COMM •
 
-    $default  reduce using rule 56 (E)
+    $default  reduce using rule 37 (Li)
 
 
 State 50
 
-   53 E: CTI •
+   24 BLOCK: TOK_LACC $@2 Li TOK_RACC •
 
-    $default  reduce using rule 53 (E)
+    $default  reduce using rule 24 (BLOCK)
 
 
 State 51
 
-   54 E: CTR •
+   31 Li: Li TOK_DACA • E TOK_ATUNCI $@5 IF_BLOCK
 
-    $default  reduce using rule 54 (E)
+    ID                shift, and go to state 58
+    CTI               shift, and go to state 59
+    CTR               shift, and go to state 60
+    CTZ               shift, and go to state 61
+    TOK_CAST_INTREG   shift, and go to state 62
+    TOK_CAST_REAL     shift, and go to state 63
+    TOK_CAST_ZECIMAL  shift, and go to state 64
+
+    E  go to state 70
 
 
 State 52
 
-   55 E: CTZ •
+   35 Li: Li TOK_Daca • E TOK_ATUNCI $@6 IF_BLOCK $@7 TOK_ALTFEL $@8 IF_BLOCK
 
-    $default  reduce using rule 55 (E)
+    ID                shift, and go to state 58
+    CTI               shift, and go to state 59
+    CTR               shift, and go to state 60
+    CTZ               shift, and go to state 61
+    TOK_CAST_INTREG   shift, and go to state 62
+    TOK_CAST_REAL     shift, and go to state 63
+    TOK_CAST_ZECIMAL  shift, and go to state 64
+
+    E  go to state 71
 
 
 State 53
 
-   34 I: ID TOK_EQ E •
-   43 E: E • TOK_PLUS E
-   44  | E • TOK_MINUS E
-   45  | E • TOK_MULT E
-   46  | E • TOK_DIV E
-   47  | E • TOK_EQUAL E
-   48  | E • TOK_GREATER E
-   49  | E • TOK_LOWER E
-   50  | E • TOK_GREQ E
-   51  | E • TOK_LWEQ E
-   52  | E • TOK_DIFFERENT E
+   36 Li: Li BLOCK •
 
-    TOK_PLUS       shift, and go to state 61
-    TOK_MINUS      shift, and go to state 62
-    TOK_MULT       shift, and go to state 63
-    TOK_DIV        shift, and go to state 64
-    TOK_LOWER      shift, and go to state 65
-    TOK_GREATER    shift, and go to state 66
-    TOK_EQUAL      shift, and go to state 67
-    TOK_DIFFERENT  shift, and go to state 68
-    TOK_LWEQ       shift, and go to state 69
-    TOK_GREQ       shift, and go to state 70
-
-    $default  reduce using rule 34 (I)
+    $default  reduce using rule 36 (Li)
 
 
 State 54
 
-   39 PRINT: PRINT ID •
+   29 Li: Li WHILE_SETUP • TOK_WHILE E TOK_EXECUTE $@4 IF_BLOCK
 
-    $default  reduce using rule 39 (PRINT)
+    TOK_WHILE  shift, and go to state 72
 
 
 State 55
 
-   40 PRINT: PRINT TXT •
+   38 Li: Li I • TOK_SEP
 
-    $default  reduce using rule 40 (PRINT)
+    TOK_SEP  shift, and go to state 73
 
 
 State 56
 
-   37 SCAN: SCAN ID •
+   39 Li: I TOK_SEP •
 
-    $default  reduce using rule 37 (SCAN)
+    $default  reduce using rule 39 (Li)
 
 
 State 57
 
-   23 Li: Li TOK_DACA E • TOK_ATUNCI $@4 IF_BLOCK
-   43 E: E • TOK_PLUS E
-   44  | E • TOK_MINUS E
-   45  | E • TOK_MULT E
-   46  | E • TOK_DIV E
-   47  | E • TOK_EQUAL E
-   48  | E • TOK_GREATER E
-   49  | E • TOK_LOWER E
-   50  | E • TOK_GREQ E
-   51  | E • TOK_LWEQ E
-   52  | E • TOK_DIFFERENT E
+   18 FUNC: FUNC TOK_FUNC ID $@1 PARAMS • TOK_LACC
+   20 PARAMS: PARAMS • ID
 
-    TOK_PLUS       shift, and go to state 61
-    TOK_MINUS      shift, and go to state 62
-    TOK_MULT       shift, and go to state 63
-    TOK_DIV        shift, and go to state 64
-    TOK_LOWER      shift, and go to state 65
-    TOK_GREATER    shift, and go to state 66
-    TOK_EQUAL      shift, and go to state 67
-    TOK_DIFFERENT  shift, and go to state 68
-    TOK_LWEQ       shift, and go to state 69
-    TOK_GREQ       shift, and go to state 70
-    TOK_ATUNCI     shift, and go to state 71
+    ID        shift, and go to state 74
+    TOK_LACC  shift, and go to state 75
 
 
 State 58
 
-   27 Li: Li TOK_Daca E • TOK_ATUNCI $@5 IF_BLOCK $@6 TOK_ALTFEL $@7 IF_BLOCK
-   43 E: E • TOK_PLUS E
-   44  | E • TOK_MINUS E
-   45  | E • TOK_MULT E
-   46  | E • TOK_DIV E
-   47  | E • TOK_EQUAL E
-   48  | E • TOK_GREATER E
-   49  | E • TOK_LOWER E
-   50  | E • TOK_GREQ E
-   51  | E • TOK_LWEQ E
-   52  | E • TOK_DIFFERENT E
+   56 E: ID • TOK_DIV E
+   58  | ID • TOK_DIV ID
+   71  | ID •
 
-    TOK_PLUS       shift, and go to state 61
-    TOK_MINUS      shift, and go to state 62
-    TOK_MULT       shift, and go to state 63
-    TOK_DIV        shift, and go to state 64
-    TOK_LOWER      shift, and go to state 65
-    TOK_GREATER    shift, and go to state 66
-    TOK_EQUAL      shift, and go to state 67
-    TOK_DIFFERENT  shift, and go to state 68
-    TOK_LWEQ       shift, and go to state 69
-    TOK_GREQ       shift, and go to state 70
-    TOK_ATUNCI     shift, and go to state 72
+    TOK_DIV  shift, and go to state 76
+
+    TOK_DIV   [reduce using rule 71 (E)]
+    $default  reduce using rule 71 (E)
 
 
 State 59
 
-   21 Li: Li WHILE_SETUP TOK_WHILE • E TOK_EXECUTE $@3 IF_BLOCK
+   68 E: CTI •
 
-    ID   shift, and go to state 49
-    CTI  shift, and go to state 50
-    CTR  shift, and go to state 51
-    CTZ  shift, and go to state 52
-
-    E  go to state 73
+    $default  reduce using rule 68 (E)
 
 
 State 60
 
-   30 Li: Li I TOK_SEP •
+   69 E: CTR •
 
-    $default  reduce using rule 30 (Li)
+    $default  reduce using rule 69 (E)
 
 
 State 61
 
-   43 E: E TOK_PLUS • E
+   70 E: CTZ •
 
-    ID   shift, and go to state 49
-    CTI  shift, and go to state 50
-    CTR  shift, and go to state 51
-    CTZ  shift, and go to state 52
-
-    E  go to state 74
+    $default  reduce using rule 70 (E)
 
 
 State 62
 
-   44 E: E TOK_MINUS • E
+   65 E: TOK_CAST_INTREG • ID
 
-    ID   shift, and go to state 49
-    CTI  shift, and go to state 50
-    CTR  shift, and go to state 51
-    CTZ  shift, and go to state 52
-
-    E  go to state 75
+    ID  shift, and go to state 77
 
 
 State 63
 
-   45 E: E TOK_MULT • E
+   66 E: TOK_CAST_REAL • ID
 
-    ID   shift, and go to state 49
-    CTI  shift, and go to state 50
-    CTR  shift, and go to state 51
-    CTZ  shift, and go to state 52
-
-    E  go to state 76
+    ID  shift, and go to state 78
 
 
 State 64
 
-   46 E: E TOK_DIV • E
+   67 E: TOK_CAST_ZECIMAL • ID
 
-    ID   shift, and go to state 49
-    CTI  shift, and go to state 50
-    CTR  shift, and go to state 51
-    CTZ  shift, and go to state 52
-
-    E  go to state 77
+    ID  shift, and go to state 79
 
 
 State 65
 
-   49 E: E TOK_LOWER • E
+   43 I: ID TOK_EQ E •
+   52 E: E • TOK_PLUS E
+   53  | E • TOK_MINUS E
+   54  | E • TOK_MULT E
+   55  | E • TOK_DIV E
+   57  | E • TOK_DIV ID
+   59  | E • TOK_EQUAL E
+   60  | E • TOK_GREATER E
+   61  | E • TOK_LOWER E
+   62  | E • TOK_GREQ E
+   63  | E • TOK_LWEQ E
+   64  | E • TOK_DIFFERENT E
 
-    ID   shift, and go to state 49
-    CTI  shift, and go to state 50
-    CTR  shift, and go to state 51
-    CTZ  shift, and go to state 52
+    TOK_PLUS       shift, and go to state 80
+    TOK_MINUS      shift, and go to state 81
+    TOK_MULT       shift, and go to state 82
+    TOK_DIV        shift, and go to state 83
+    TOK_LOWER      shift, and go to state 84
+    TOK_GREATER    shift, and go to state 85
+    TOK_EQUAL      shift, and go to state 86
+    TOK_DIFFERENT  shift, and go to state 87
+    TOK_LWEQ       shift, and go to state 88
+    TOK_GREQ       shift, and go to state 89
 
-    E  go to state 78
+    $default  reduce using rule 43 (I)
 
 
 State 66
 
-   48 E: E TOK_GREATER • E
+   48 PRINT: PRINT ID •
 
-    ID   shift, and go to state 49
-    CTI  shift, and go to state 50
-    CTR  shift, and go to state 51
-    CTZ  shift, and go to state 52
-
-    E  go to state 79
+    $default  reduce using rule 48 (PRINT)
 
 
 State 67
 
-   47 E: E TOK_EQUAL • E
+   49 PRINT: PRINT TXT •
 
-    ID   shift, and go to state 49
-    CTI  shift, and go to state 50
-    CTR  shift, and go to state 51
-    CTZ  shift, and go to state 52
-
-    E  go to state 80
+    $default  reduce using rule 49 (PRINT)
 
 
 State 68
 
-   52 E: E TOK_DIFFERENT • E
+   46 SCAN: SCAN ID •
 
-    ID   shift, and go to state 49
-    CTI  shift, and go to state 50
-    CTR  shift, and go to state 51
-    CTZ  shift, and go to state 52
-
-    E  go to state 81
+    $default  reduce using rule 46 (SCAN)
 
 
 State 69
 
-   51 E: E TOK_LWEQ • E
+   22 PARAMS_APEL: PARAMS_APEL • ID
+   42 I: TOK_CALL ID PARAMS_APEL •
 
-    ID   shift, and go to state 49
-    CTI  shift, and go to state 50
-    CTR  shift, and go to state 51
-    CTZ  shift, and go to state 52
+    ID  shift, and go to state 90
 
-    E  go to state 82
+    $default  reduce using rule 42 (I)
 
 
 State 70
 
-   50 E: E TOK_GREQ • E
+   31 Li: Li TOK_DACA E • TOK_ATUNCI $@5 IF_BLOCK
+   52 E: E • TOK_PLUS E
+   53  | E • TOK_MINUS E
+   54  | E • TOK_MULT E
+   55  | E • TOK_DIV E
+   57  | E • TOK_DIV ID
+   59  | E • TOK_EQUAL E
+   60  | E • TOK_GREATER E
+   61  | E • TOK_LOWER E
+   62  | E • TOK_GREQ E
+   63  | E • TOK_LWEQ E
+   64  | E • TOK_DIFFERENT E
 
-    ID   shift, and go to state 49
-    CTI  shift, and go to state 50
-    CTR  shift, and go to state 51
-    CTZ  shift, and go to state 52
-
-    E  go to state 83
+    TOK_PLUS       shift, and go to state 80
+    TOK_MINUS      shift, and go to state 81
+    TOK_MULT       shift, and go to state 82
+    TOK_DIV        shift, and go to state 83
+    TOK_LOWER      shift, and go to state 84
+    TOK_GREATER    shift, and go to state 85
+    TOK_EQUAL      shift, and go to state 86
+    TOK_DIFFERENT  shift, and go to state 87
+    TOK_LWEQ       shift, and go to state 88
+    TOK_GREQ       shift, and go to state 89
+    TOK_ATUNCI     shift, and go to state 91
 
 
 State 71
 
-   23 Li: Li TOK_DACA E TOK_ATUNCI • $@4 IF_BLOCK
+   35 Li: Li TOK_Daca E • TOK_ATUNCI $@6 IF_BLOCK $@7 TOK_ALTFEL $@8 IF_BLOCK
+   52 E: E • TOK_PLUS E
+   53  | E • TOK_MINUS E
+   54  | E • TOK_MULT E
+   55  | E • TOK_DIV E
+   57  | E • TOK_DIV ID
+   59  | E • TOK_EQUAL E
+   60  | E • TOK_GREATER E
+   61  | E • TOK_LOWER E
+   62  | E • TOK_GREQ E
+   63  | E • TOK_LWEQ E
+   64  | E • TOK_DIFFERENT E
 
-    $default  reduce using rule 22 ($@4)
-
-    $@4  go to state 84
+    TOK_PLUS       shift, and go to state 80
+    TOK_MINUS      shift, and go to state 81
+    TOK_MULT       shift, and go to state 82
+    TOK_DIV        shift, and go to state 83
+    TOK_LOWER      shift, and go to state 84
+    TOK_GREATER    shift, and go to state 85
+    TOK_EQUAL      shift, and go to state 86
+    TOK_DIFFERENT  shift, and go to state 87
+    TOK_LWEQ       shift, and go to state 88
+    TOK_GREQ       shift, and go to state 89
+    TOK_ATUNCI     shift, and go to state 92
 
 
 State 72
 
-   27 Li: Li TOK_Daca E TOK_ATUNCI • $@5 IF_BLOCK $@6 TOK_ALTFEL $@7 IF_BLOCK
+   29 Li: Li WHILE_SETUP TOK_WHILE • E TOK_EXECUTE $@4 IF_BLOCK
 
-    $default  reduce using rule 24 ($@5)
+    ID                shift, and go to state 58
+    CTI               shift, and go to state 59
+    CTR               shift, and go to state 60
+    CTZ               shift, and go to state 61
+    TOK_CAST_INTREG   shift, and go to state 62
+    TOK_CAST_REAL     shift, and go to state 63
+    TOK_CAST_ZECIMAL  shift, and go to state 64
 
-    $@5  go to state 85
+    E  go to state 93
 
 
 State 73
 
-   21 Li: Li WHILE_SETUP TOK_WHILE E • TOK_EXECUTE $@3 IF_BLOCK
-   43 E: E • TOK_PLUS E
-   44  | E • TOK_MINUS E
-   45  | E • TOK_MULT E
-   46  | E • TOK_DIV E
-   47  | E • TOK_EQUAL E
-   48  | E • TOK_GREATER E
-   49  | E • TOK_LOWER E
-   50  | E • TOK_GREQ E
-   51  | E • TOK_LWEQ E
-   52  | E • TOK_DIFFERENT E
+   38 Li: Li I TOK_SEP •
 
-    TOK_PLUS       shift, and go to state 61
-    TOK_MINUS      shift, and go to state 62
-    TOK_MULT       shift, and go to state 63
-    TOK_DIV        shift, and go to state 64
-    TOK_LOWER      shift, and go to state 65
-    TOK_GREATER    shift, and go to state 66
-    TOK_EQUAL      shift, and go to state 67
-    TOK_DIFFERENT  shift, and go to state 68
-    TOK_LWEQ       shift, and go to state 69
-    TOK_GREQ       shift, and go to state 70
-    TOK_EXECUTE    shift, and go to state 86
+    $default  reduce using rule 38 (Li)
 
 
 State 74
 
-   43 E: E • TOK_PLUS E
-   43  | E TOK_PLUS E •
-   44  | E • TOK_MINUS E
-   45  | E • TOK_MULT E
-   46  | E • TOK_DIV E
-   47  | E • TOK_EQUAL E
-   48  | E • TOK_GREATER E
-   49  | E • TOK_LOWER E
-   50  | E • TOK_GREQ E
-   51  | E • TOK_LWEQ E
-   52  | E • TOK_DIFFERENT E
+   20 PARAMS: PARAMS ID •
 
-    TOK_MULT       shift, and go to state 63
-    TOK_DIV        shift, and go to state 64
-    TOK_LOWER      shift, and go to state 65
-    TOK_GREATER    shift, and go to state 66
-    TOK_EQUAL      shift, and go to state 67
-    TOK_DIFFERENT  shift, and go to state 68
-    TOK_LWEQ       shift, and go to state 69
-    TOK_GREQ       shift, and go to state 70
-
-    TOK_LOWER      [reduce using rule 43 (E)]
-    TOK_GREATER    [reduce using rule 43 (E)]
-    TOK_EQUAL      [reduce using rule 43 (E)]
-    TOK_DIFFERENT  [reduce using rule 43 (E)]
-    TOK_LWEQ       [reduce using rule 43 (E)]
-    TOK_GREQ       [reduce using rule 43 (E)]
-    $default       reduce using rule 43 (E)
+    $default  reduce using rule 20 (PARAMS)
 
 
 State 75
 
-   43 E: E • TOK_PLUS E
-   44  | E • TOK_MINUS E
-   44  | E TOK_MINUS E •
-   45  | E • TOK_MULT E
-   46  | E • TOK_DIV E
-   47  | E • TOK_EQUAL E
-   48  | E • TOK_GREATER E
-   49  | E • TOK_LOWER E
-   50  | E • TOK_GREQ E
-   51  | E • TOK_LWEQ E
-   52  | E • TOK_DIFFERENT E
+   18 FUNC: FUNC TOK_FUNC ID $@1 PARAMS TOK_LACC •
 
-    TOK_MULT       shift, and go to state 63
-    TOK_DIV        shift, and go to state 64
-    TOK_LOWER      shift, and go to state 65
-    TOK_GREATER    shift, and go to state 66
-    TOK_EQUAL      shift, and go to state 67
-    TOK_DIFFERENT  shift, and go to state 68
-    TOK_LWEQ       shift, and go to state 69
-    TOK_GREQ       shift, and go to state 70
-
-    TOK_LOWER      [reduce using rule 44 (E)]
-    TOK_GREATER    [reduce using rule 44 (E)]
-    TOK_EQUAL      [reduce using rule 44 (E)]
-    TOK_DIFFERENT  [reduce using rule 44 (E)]
-    TOK_LWEQ       [reduce using rule 44 (E)]
-    TOK_GREQ       [reduce using rule 44 (E)]
-    $default       reduce using rule 44 (E)
+    $default  reduce using rule 18 (FUNC)
 
 
 State 76
 
-   43 E: E • TOK_PLUS E
-   44  | E • TOK_MINUS E
-   45  | E • TOK_MULT E
-   45  | E TOK_MULT E •
-   46  | E • TOK_DIV E
-   47  | E • TOK_EQUAL E
-   48  | E • TOK_GREATER E
-   49  | E • TOK_LOWER E
-   50  | E • TOK_GREQ E
-   51  | E • TOK_LWEQ E
-   52  | E • TOK_DIFFERENT E
+   56 E: ID TOK_DIV • E
+   58  | ID TOK_DIV • ID
 
-    TOK_LOWER      shift, and go to state 65
-    TOK_GREATER    shift, and go to state 66
-    TOK_EQUAL      shift, and go to state 67
-    TOK_DIFFERENT  shift, and go to state 68
-    TOK_LWEQ       shift, and go to state 69
-    TOK_GREQ       shift, and go to state 70
+    ID                shift, and go to state 94
+    CTI               shift, and go to state 59
+    CTR               shift, and go to state 60
+    CTZ               shift, and go to state 61
+    TOK_CAST_INTREG   shift, and go to state 62
+    TOK_CAST_REAL     shift, and go to state 63
+    TOK_CAST_ZECIMAL  shift, and go to state 64
 
-    TOK_LOWER      [reduce using rule 45 (E)]
-    TOK_GREATER    [reduce using rule 45 (E)]
-    TOK_EQUAL      [reduce using rule 45 (E)]
-    TOK_DIFFERENT  [reduce using rule 45 (E)]
-    TOK_LWEQ       [reduce using rule 45 (E)]
-    TOK_GREQ       [reduce using rule 45 (E)]
-    $default       reduce using rule 45 (E)
+    E  go to state 95
 
 
 State 77
 
-   43 E: E • TOK_PLUS E
-   44  | E • TOK_MINUS E
-   45  | E • TOK_MULT E
-   46  | E • TOK_DIV E
-   46  | E TOK_DIV E •
-   47  | E • TOK_EQUAL E
-   48  | E • TOK_GREATER E
-   49  | E • TOK_LOWER E
-   50  | E • TOK_GREQ E
-   51  | E • TOK_LWEQ E
-   52  | E • TOK_DIFFERENT E
+   65 E: TOK_CAST_INTREG ID •
 
-    TOK_LOWER      shift, and go to state 65
-    TOK_GREATER    shift, and go to state 66
-    TOK_EQUAL      shift, and go to state 67
-    TOK_DIFFERENT  shift, and go to state 68
-    TOK_LWEQ       shift, and go to state 69
-    TOK_GREQ       shift, and go to state 70
-
-    TOK_LOWER      [reduce using rule 46 (E)]
-    TOK_GREATER    [reduce using rule 46 (E)]
-    TOK_EQUAL      [reduce using rule 46 (E)]
-    TOK_DIFFERENT  [reduce using rule 46 (E)]
-    TOK_LWEQ       [reduce using rule 46 (E)]
-    TOK_GREQ       [reduce using rule 46 (E)]
-    $default       reduce using rule 46 (E)
+    $default  reduce using rule 65 (E)
 
 
 State 78
 
-   43 E: E • TOK_PLUS E
-   44  | E • TOK_MINUS E
-   45  | E • TOK_MULT E
-   46  | E • TOK_DIV E
-   47  | E • TOK_EQUAL E
-   48  | E • TOK_GREATER E
-   49  | E • TOK_LOWER E
-   49  | E TOK_LOWER E •
-   50  | E • TOK_GREQ E
-   51  | E • TOK_LWEQ E
-   52  | E • TOK_DIFFERENT E
+   66 E: TOK_CAST_REAL ID •
 
-    TOK_PLUS       shift, and go to state 61
-    TOK_MINUS      shift, and go to state 62
-    TOK_MULT       shift, and go to state 63
-    TOK_DIV        shift, and go to state 64
-    TOK_LOWER      shift, and go to state 65
-    TOK_GREATER    shift, and go to state 66
-    TOK_EQUAL      shift, and go to state 67
-    TOK_DIFFERENT  shift, and go to state 68
-    TOK_LWEQ       shift, and go to state 69
-    TOK_GREQ       shift, and go to state 70
-
-    TOK_PLUS       [reduce using rule 49 (E)]
-    TOK_MINUS      [reduce using rule 49 (E)]
-    TOK_MULT       [reduce using rule 49 (E)]
-    TOK_DIV        [reduce using rule 49 (E)]
-    TOK_LOWER      [reduce using rule 49 (E)]
-    TOK_GREATER    [reduce using rule 49 (E)]
-    TOK_EQUAL      [reduce using rule 49 (E)]
-    TOK_DIFFERENT  [reduce using rule 49 (E)]
-    TOK_LWEQ       [reduce using rule 49 (E)]
-    TOK_GREQ       [reduce using rule 49 (E)]
-    $default       reduce using rule 49 (E)
+    $default  reduce using rule 66 (E)
 
 
 State 79
 
-   43 E: E • TOK_PLUS E
-   44  | E • TOK_MINUS E
-   45  | E • TOK_MULT E
-   46  | E • TOK_DIV E
-   47  | E • TOK_EQUAL E
-   48  | E • TOK_GREATER E
-   48  | E TOK_GREATER E •
-   49  | E • TOK_LOWER E
-   50  | E • TOK_GREQ E
-   51  | E • TOK_LWEQ E
-   52  | E • TOK_DIFFERENT E
+   67 E: TOK_CAST_ZECIMAL ID •
 
-    TOK_PLUS       shift, and go to state 61
-    TOK_MINUS      shift, and go to state 62
-    TOK_MULT       shift, and go to state 63
-    TOK_DIV        shift, and go to state 64
-    TOK_LOWER      shift, and go to state 65
-    TOK_GREATER    shift, and go to state 66
-    TOK_EQUAL      shift, and go to state 67
-    TOK_DIFFERENT  shift, and go to state 68
-    TOK_LWEQ       shift, and go to state 69
-    TOK_GREQ       shift, and go to state 70
-
-    TOK_PLUS       [reduce using rule 48 (E)]
-    TOK_MINUS      [reduce using rule 48 (E)]
-    TOK_MULT       [reduce using rule 48 (E)]
-    TOK_DIV        [reduce using rule 48 (E)]
-    TOK_LOWER      [reduce using rule 48 (E)]
-    TOK_GREATER    [reduce using rule 48 (E)]
-    TOK_EQUAL      [reduce using rule 48 (E)]
-    TOK_DIFFERENT  [reduce using rule 48 (E)]
-    TOK_LWEQ       [reduce using rule 48 (E)]
-    TOK_GREQ       [reduce using rule 48 (E)]
-    $default       reduce using rule 48 (E)
+    $default  reduce using rule 67 (E)
 
 
 State 80
 
-   43 E: E • TOK_PLUS E
-   44  | E • TOK_MINUS E
-   45  | E • TOK_MULT E
-   46  | E • TOK_DIV E
-   47  | E • TOK_EQUAL E
-   47  | E TOK_EQUAL E •
-   48  | E • TOK_GREATER E
-   49  | E • TOK_LOWER E
-   50  | E • TOK_GREQ E
-   51  | E • TOK_LWEQ E
-   52  | E • TOK_DIFFERENT E
+   52 E: E TOK_PLUS • E
 
-    TOK_PLUS       shift, and go to state 61
-    TOK_MINUS      shift, and go to state 62
-    TOK_MULT       shift, and go to state 63
-    TOK_DIV        shift, and go to state 64
-    TOK_LOWER      shift, and go to state 65
-    TOK_GREATER    shift, and go to state 66
-    TOK_EQUAL      shift, and go to state 67
-    TOK_DIFFERENT  shift, and go to state 68
-    TOK_LWEQ       shift, and go to state 69
-    TOK_GREQ       shift, and go to state 70
+    ID                shift, and go to state 58
+    CTI               shift, and go to state 59
+    CTR               shift, and go to state 60
+    CTZ               shift, and go to state 61
+    TOK_CAST_INTREG   shift, and go to state 62
+    TOK_CAST_REAL     shift, and go to state 63
+    TOK_CAST_ZECIMAL  shift, and go to state 64
 
-    TOK_PLUS       [reduce using rule 47 (E)]
-    TOK_MINUS      [reduce using rule 47 (E)]
-    TOK_MULT       [reduce using rule 47 (E)]
-    TOK_DIV        [reduce using rule 47 (E)]
-    TOK_LOWER      [reduce using rule 47 (E)]
-    TOK_GREATER    [reduce using rule 47 (E)]
-    TOK_EQUAL      [reduce using rule 47 (E)]
-    TOK_DIFFERENT  [reduce using rule 47 (E)]
-    TOK_LWEQ       [reduce using rule 47 (E)]
-    TOK_GREQ       [reduce using rule 47 (E)]
-    $default       reduce using rule 47 (E)
+    E  go to state 96
 
 
 State 81
 
-   43 E: E • TOK_PLUS E
-   44  | E • TOK_MINUS E
-   45  | E • TOK_MULT E
-   46  | E • TOK_DIV E
-   47  | E • TOK_EQUAL E
-   48  | E • TOK_GREATER E
-   49  | E • TOK_LOWER E
-   50  | E • TOK_GREQ E
-   51  | E • TOK_LWEQ E
-   52  | E • TOK_DIFFERENT E
-   52  | E TOK_DIFFERENT E •
+   53 E: E TOK_MINUS • E
 
-    TOK_PLUS       shift, and go to state 61
-    TOK_MINUS      shift, and go to state 62
-    TOK_MULT       shift, and go to state 63
-    TOK_DIV        shift, and go to state 64
-    TOK_LOWER      shift, and go to state 65
-    TOK_GREATER    shift, and go to state 66
-    TOK_EQUAL      shift, and go to state 67
-    TOK_DIFFERENT  shift, and go to state 68
-    TOK_LWEQ       shift, and go to state 69
-    TOK_GREQ       shift, and go to state 70
+    ID                shift, and go to state 58
+    CTI               shift, and go to state 59
+    CTR               shift, and go to state 60
+    CTZ               shift, and go to state 61
+    TOK_CAST_INTREG   shift, and go to state 62
+    TOK_CAST_REAL     shift, and go to state 63
+    TOK_CAST_ZECIMAL  shift, and go to state 64
 
-    TOK_PLUS       [reduce using rule 52 (E)]
-    TOK_MINUS      [reduce using rule 52 (E)]
-    TOK_MULT       [reduce using rule 52 (E)]
-    TOK_DIV        [reduce using rule 52 (E)]
+    E  go to state 97
+
+
+State 82
+
+   54 E: E TOK_MULT • E
+
+    ID                shift, and go to state 58
+    CTI               shift, and go to state 59
+    CTR               shift, and go to state 60
+    CTZ               shift, and go to state 61
+    TOK_CAST_INTREG   shift, and go to state 62
+    TOK_CAST_REAL     shift, and go to state 63
+    TOK_CAST_ZECIMAL  shift, and go to state 64
+
+    E  go to state 98
+
+
+State 83
+
+   55 E: E TOK_DIV • E
+   57  | E TOK_DIV • ID
+
+    ID                shift, and go to state 99
+    CTI               shift, and go to state 59
+    CTR               shift, and go to state 60
+    CTZ               shift, and go to state 61
+    TOK_CAST_INTREG   shift, and go to state 62
+    TOK_CAST_REAL     shift, and go to state 63
+    TOK_CAST_ZECIMAL  shift, and go to state 64
+
+    E  go to state 100
+
+
+State 84
+
+   61 E: E TOK_LOWER • E
+
+    ID                shift, and go to state 58
+    CTI               shift, and go to state 59
+    CTR               shift, and go to state 60
+    CTZ               shift, and go to state 61
+    TOK_CAST_INTREG   shift, and go to state 62
+    TOK_CAST_REAL     shift, and go to state 63
+    TOK_CAST_ZECIMAL  shift, and go to state 64
+
+    E  go to state 101
+
+
+State 85
+
+   60 E: E TOK_GREATER • E
+
+    ID                shift, and go to state 58
+    CTI               shift, and go to state 59
+    CTR               shift, and go to state 60
+    CTZ               shift, and go to state 61
+    TOK_CAST_INTREG   shift, and go to state 62
+    TOK_CAST_REAL     shift, and go to state 63
+    TOK_CAST_ZECIMAL  shift, and go to state 64
+
+    E  go to state 102
+
+
+State 86
+
+   59 E: E TOK_EQUAL • E
+
+    ID                shift, and go to state 58
+    CTI               shift, and go to state 59
+    CTR               shift, and go to state 60
+    CTZ               shift, and go to state 61
+    TOK_CAST_INTREG   shift, and go to state 62
+    TOK_CAST_REAL     shift, and go to state 63
+    TOK_CAST_ZECIMAL  shift, and go to state 64
+
+    E  go to state 103
+
+
+State 87
+
+   64 E: E TOK_DIFFERENT • E
+
+    ID                shift, and go to state 58
+    CTI               shift, and go to state 59
+    CTR               shift, and go to state 60
+    CTZ               shift, and go to state 61
+    TOK_CAST_INTREG   shift, and go to state 62
+    TOK_CAST_REAL     shift, and go to state 63
+    TOK_CAST_ZECIMAL  shift, and go to state 64
+
+    E  go to state 104
+
+
+State 88
+
+   63 E: E TOK_LWEQ • E
+
+    ID                shift, and go to state 58
+    CTI               shift, and go to state 59
+    CTR               shift, and go to state 60
+    CTZ               shift, and go to state 61
+    TOK_CAST_INTREG   shift, and go to state 62
+    TOK_CAST_REAL     shift, and go to state 63
+    TOK_CAST_ZECIMAL  shift, and go to state 64
+
+    E  go to state 105
+
+
+State 89
+
+   62 E: E TOK_GREQ • E
+
+    ID                shift, and go to state 58
+    CTI               shift, and go to state 59
+    CTR               shift, and go to state 60
+    CTZ               shift, and go to state 61
+    TOK_CAST_INTREG   shift, and go to state 62
+    TOK_CAST_REAL     shift, and go to state 63
+    TOK_CAST_ZECIMAL  shift, and go to state 64
+
+    E  go to state 106
+
+
+State 90
+
+   22 PARAMS_APEL: PARAMS_APEL ID •
+
+    $default  reduce using rule 22 (PARAMS_APEL)
+
+
+State 91
+
+   31 Li: Li TOK_DACA E TOK_ATUNCI • $@5 IF_BLOCK
+
+    $default  reduce using rule 30 ($@5)
+
+    $@5  go to state 107
+
+
+State 92
+
+   35 Li: Li TOK_Daca E TOK_ATUNCI • $@6 IF_BLOCK $@7 TOK_ALTFEL $@8 IF_BLOCK
+
+    $default  reduce using rule 32 ($@6)
+
+    $@6  go to state 108
+
+
+State 93
+
+   29 Li: Li WHILE_SETUP TOK_WHILE E • TOK_EXECUTE $@4 IF_BLOCK
+   52 E: E • TOK_PLUS E
+   53  | E • TOK_MINUS E
+   54  | E • TOK_MULT E
+   55  | E • TOK_DIV E
+   57  | E • TOK_DIV ID
+   59  | E • TOK_EQUAL E
+   60  | E • TOK_GREATER E
+   61  | E • TOK_LOWER E
+   62  | E • TOK_GREQ E
+   63  | E • TOK_LWEQ E
+   64  | E • TOK_DIFFERENT E
+
+    TOK_PLUS       shift, and go to state 80
+    TOK_MINUS      shift, and go to state 81
+    TOK_MULT       shift, and go to state 82
+    TOK_DIV        shift, and go to state 83
+    TOK_LOWER      shift, and go to state 84
+    TOK_GREATER    shift, and go to state 85
+    TOK_EQUAL      shift, and go to state 86
+    TOK_DIFFERENT  shift, and go to state 87
+    TOK_LWEQ       shift, and go to state 88
+    TOK_GREQ       shift, and go to state 89
+    TOK_EXECUTE    shift, and go to state 109
+
+
+State 94
+
+   56 E: ID • TOK_DIV E
+   58  | ID • TOK_DIV ID
+   58  | ID TOK_DIV ID •
+   71  | ID •
+
+    TOK_DIV  shift, and go to state 76
+
+    TOK_PLUS       reduce using rule 58 (E)
+    TOK_PLUS       [reduce using rule 71 (E)]
+    TOK_MINUS      reduce using rule 58 (E)
+    TOK_MINUS      [reduce using rule 71 (E)]
+    TOK_MULT       reduce using rule 58 (E)
+    TOK_MULT       [reduce using rule 71 (E)]
+    TOK_DIV        [reduce using rule 58 (E)]
+    TOK_DIV        [reduce using rule 71 (E)]
+    TOK_SEP        reduce using rule 58 (E)
+    TOK_SEP        [reduce using rule 71 (E)]
+    TOK_LOWER      reduce using rule 58 (E)
+    TOK_LOWER      [reduce using rule 71 (E)]
+    TOK_GREATER    reduce using rule 58 (E)
+    TOK_GREATER    [reduce using rule 71 (E)]
+    TOK_EQUAL      reduce using rule 58 (E)
+    TOK_EQUAL      [reduce using rule 71 (E)]
+    TOK_DIFFERENT  reduce using rule 58 (E)
+    TOK_DIFFERENT  [reduce using rule 71 (E)]
+    TOK_LWEQ       reduce using rule 58 (E)
+    TOK_LWEQ       [reduce using rule 71 (E)]
+    TOK_GREQ       reduce using rule 58 (E)
+    TOK_GREQ       [reduce using rule 71 (E)]
+    TOK_ATUNCI     reduce using rule 58 (E)
+    TOK_ATUNCI     [reduce using rule 71 (E)]
+    TOK_EXECUTE    reduce using rule 58 (E)
+    TOK_EXECUTE    [reduce using rule 71 (E)]
+    $default       reduce using rule 58 (E)
+
+
+State 95
+
+   52 E: E • TOK_PLUS E
+   53  | E • TOK_MINUS E
+   54  | E • TOK_MULT E
+   55  | E • TOK_DIV E
+   56  | ID TOK_DIV E •
+   57  | E • TOK_DIV ID
+   59  | E • TOK_EQUAL E
+   60  | E • TOK_GREATER E
+   61  | E • TOK_LOWER E
+   62  | E • TOK_GREQ E
+   63  | E • TOK_LWEQ E
+   64  | E • TOK_DIFFERENT E
+
+    TOK_LOWER      shift, and go to state 84
+    TOK_GREATER    shift, and go to state 85
+    TOK_EQUAL      shift, and go to state 86
+    TOK_DIFFERENT  shift, and go to state 87
+    TOK_LWEQ       shift, and go to state 88
+    TOK_GREQ       shift, and go to state 89
+
+    TOK_LOWER      [reduce using rule 56 (E)]
+    TOK_GREATER    [reduce using rule 56 (E)]
+    TOK_EQUAL      [reduce using rule 56 (E)]
+    TOK_DIFFERENT  [reduce using rule 56 (E)]
+    TOK_LWEQ       [reduce using rule 56 (E)]
+    TOK_GREQ       [reduce using rule 56 (E)]
+    $default       reduce using rule 56 (E)
+
+
+State 96
+
+   52 E: E • TOK_PLUS E
+   52  | E TOK_PLUS E •
+   53  | E • TOK_MINUS E
+   54  | E • TOK_MULT E
+   55  | E • TOK_DIV E
+   57  | E • TOK_DIV ID
+   59  | E • TOK_EQUAL E
+   60  | E • TOK_GREATER E
+   61  | E • TOK_LOWER E
+   62  | E • TOK_GREQ E
+   63  | E • TOK_LWEQ E
+   64  | E • TOK_DIFFERENT E
+
+    TOK_MULT       shift, and go to state 82
+    TOK_DIV        shift, and go to state 83
+    TOK_LOWER      shift, and go to state 84
+    TOK_GREATER    shift, and go to state 85
+    TOK_EQUAL      shift, and go to state 86
+    TOK_DIFFERENT  shift, and go to state 87
+    TOK_LWEQ       shift, and go to state 88
+    TOK_GREQ       shift, and go to state 89
+
     TOK_LOWER      [reduce using rule 52 (E)]
     TOK_GREATER    [reduce using rule 52 (E)]
     TOK_EQUAL      [reduce using rule 52 (E)]
@@ -1259,238 +1360,532 @@ State 81
     $default       reduce using rule 52 (E)
 
 
-State 82
-
-   43 E: E • TOK_PLUS E
-   44  | E • TOK_MINUS E
-   45  | E • TOK_MULT E
-   46  | E • TOK_DIV E
-   47  | E • TOK_EQUAL E
-   48  | E • TOK_GREATER E
-   49  | E • TOK_LOWER E
-   50  | E • TOK_GREQ E
-   51  | E • TOK_LWEQ E
-   51  | E TOK_LWEQ E •
-   52  | E • TOK_DIFFERENT E
-
-    TOK_PLUS       shift, and go to state 61
-    TOK_MINUS      shift, and go to state 62
-    TOK_MULT       shift, and go to state 63
-    TOK_DIV        shift, and go to state 64
-    TOK_LOWER      shift, and go to state 65
-    TOK_GREATER    shift, and go to state 66
-    TOK_EQUAL      shift, and go to state 67
-    TOK_DIFFERENT  shift, and go to state 68
-    TOK_LWEQ       shift, and go to state 69
-    TOK_GREQ       shift, and go to state 70
-
-    TOK_PLUS       [reduce using rule 51 (E)]
-    TOK_MINUS      [reduce using rule 51 (E)]
-    TOK_MULT       [reduce using rule 51 (E)]
-    TOK_DIV        [reduce using rule 51 (E)]
-    TOK_LOWER      [reduce using rule 51 (E)]
-    TOK_GREATER    [reduce using rule 51 (E)]
-    TOK_EQUAL      [reduce using rule 51 (E)]
-    TOK_DIFFERENT  [reduce using rule 51 (E)]
-    TOK_LWEQ       [reduce using rule 51 (E)]
-    TOK_GREQ       [reduce using rule 51 (E)]
-    $default       reduce using rule 51 (E)
-
-
-State 83
-
-   43 E: E • TOK_PLUS E
-   44  | E • TOK_MINUS E
-   45  | E • TOK_MULT E
-   46  | E • TOK_DIV E
-   47  | E • TOK_EQUAL E
-   48  | E • TOK_GREATER E
-   49  | E • TOK_LOWER E
-   50  | E • TOK_GREQ E
-   50  | E TOK_GREQ E •
-   51  | E • TOK_LWEQ E
-   52  | E • TOK_DIFFERENT E
-
-    TOK_PLUS       shift, and go to state 61
-    TOK_MINUS      shift, and go to state 62
-    TOK_MULT       shift, and go to state 63
-    TOK_DIV        shift, and go to state 64
-    TOK_LOWER      shift, and go to state 65
-    TOK_GREATER    shift, and go to state 66
-    TOK_EQUAL      shift, and go to state 67
-    TOK_DIFFERENT  shift, and go to state 68
-    TOK_LWEQ       shift, and go to state 69
-    TOK_GREQ       shift, and go to state 70
-
-    TOK_PLUS       [reduce using rule 50 (E)]
-    TOK_MINUS      [reduce using rule 50 (E)]
-    TOK_MULT       [reduce using rule 50 (E)]
-    TOK_DIV        [reduce using rule 50 (E)]
-    TOK_LOWER      [reduce using rule 50 (E)]
-    TOK_GREATER    [reduce using rule 50 (E)]
-    TOK_EQUAL      [reduce using rule 50 (E)]
-    TOK_DIFFERENT  [reduce using rule 50 (E)]
-    TOK_LWEQ       [reduce using rule 50 (E)]
-    TOK_GREQ       [reduce using rule 50 (E)]
-    $default       reduce using rule 50 (E)
-
-
-State 84
-
-   23 Li: Li TOK_DACA E TOK_ATUNCI $@4 • IF_BLOCK
-
-    TOK_LACC  shift, and go to state 87
-
-    IF_BLOCK  go to state 88
-
-
-State 85
-
-   27 Li: Li TOK_Daca E TOK_ATUNCI $@5 • IF_BLOCK $@6 TOK_ALTFEL $@7 IF_BLOCK
-
-    TOK_LACC  shift, and go to state 87
-
-    IF_BLOCK  go to state 89
-
-
-State 86
-
-   21 Li: Li WHILE_SETUP TOK_WHILE E TOK_EXECUTE • $@3 IF_BLOCK
-
-    $default  reduce using rule 20 ($@3)
-
-    $@3  go to state 90
-
-
-State 87
-
-   18 IF_BLOCK: TOK_LACC • $@2 Li TOK_RACC
-
-    $default  reduce using rule 17 ($@2)
-
-    $@2  go to state 91
-
-
-State 88
-
-   23 Li: Li TOK_DACA E TOK_ATUNCI $@4 IF_BLOCK •
-
-    $default  reduce using rule 23 (Li)
-
-
-State 89
-
-   27 Li: Li TOK_Daca E TOK_ATUNCI $@5 IF_BLOCK • $@6 TOK_ALTFEL $@7 IF_BLOCK
-
-    $default  reduce using rule 25 ($@6)
-
-    $@6  go to state 92
-
-
-State 90
-
-   21 Li: Li WHILE_SETUP TOK_WHILE E TOK_EXECUTE $@3 • IF_BLOCK
-
-    TOK_LACC  shift, and go to state 87
-
-    IF_BLOCK  go to state 93
-
-
-State 91
-
-   18 IF_BLOCK: TOK_LACC $@2 • Li TOK_RACC
-
-    ID            shift, and go to state 29
-    TOK_INTREG    shift, and go to state 1
-    TOK_REAL      shift, and go to state 2
-    TOK_ZECIMAL   shift, and go to state 3
-    TOK_AFISEAZA  shift, and go to state 30
-    TOK_CITESTE   shift, and go to state 31
-
-    ID            [reduce using rule 19 (Li)]
-    TOK_INTREG    [reduce using rule 19 (Li)]
-    TOK_REAL      [reduce using rule 19 (Li)]
-    TOK_ZECIMAL   [reduce using rule 19 (Li)]
-    TOK_AFISEAZA  [reduce using rule 19 (Li)]
-    TOK_CITESTE   [reduce using rule 19 (Li)]
-    $default      reduce using rule 19 (Li)
-
-    D   go to state 32
-    Li  go to state 94
-    I   go to state 34
-
-
-State 92
-
-   27 Li: Li TOK_Daca E TOK_ATUNCI $@5 IF_BLOCK $@6 • TOK_ALTFEL $@7 IF_BLOCK
-
-    TOK_ALTFEL  shift, and go to state 95
-
-
-State 93
-
-   21 Li: Li WHILE_SETUP TOK_WHILE E TOK_EXECUTE $@3 IF_BLOCK •
-
-    $default  reduce using rule 21 (Li)
-
-
-State 94
-
-   18 IF_BLOCK: TOK_LACC $@2 Li • TOK_RACC
-   21 Li: Li • WHILE_SETUP TOK_WHILE E TOK_EXECUTE $@3 IF_BLOCK
-   23   | Li • TOK_DACA E TOK_ATUNCI $@4 IF_BLOCK
-   27   | Li • TOK_Daca E TOK_ATUNCI $@5 IF_BLOCK $@6 TOK_ALTFEL $@7 IF_BLOCK
-   28   | Li • BLOCK
-   29   | Li • TOK_COMM
-   30   | Li • I TOK_SEP
-
-    ID            shift, and go to state 29
-    TOK_INTREG    shift, and go to state 1
-    TOK_REAL      shift, and go to state 2
-    TOK_ZECIMAL   shift, and go to state 3
-    TOK_AFISEAZA  shift, and go to state 30
-    TOK_CITESTE   shift, and go to state 31
-    TOK_COMM      shift, and go to state 41
-    TOK_LACC      shift, and go to state 14
-    TOK_RACC      shift, and go to state 96
-    TOK_DACA      shift, and go to state 43
-    TOK_Daca      shift, and go to state 44
-
-    $default  reduce using rule 32 (WHILE_SETUP)
-
-    D            go to state 32
-    BLOCK        go to state 45
-    WHILE_SETUP  go to state 46
-    I            go to state 47
-
-
-State 95
-
-   27 Li: Li TOK_Daca E TOK_ATUNCI $@5 IF_BLOCK $@6 TOK_ALTFEL • $@7 IF_BLOCK
-
-    $default  reduce using rule 26 ($@7)
-
-    $@7  go to state 97
-
-
-State 96
-
-   18 IF_BLOCK: TOK_LACC $@2 Li TOK_RACC •
-
-    $default  reduce using rule 18 (IF_BLOCK)
-
-
 State 97
 
-   27 Li: Li TOK_Daca E TOK_ATUNCI $@5 IF_BLOCK $@6 TOK_ALTFEL $@7 • IF_BLOCK
+   52 E: E • TOK_PLUS E
+   53  | E • TOK_MINUS E
+   53  | E TOK_MINUS E •
+   54  | E • TOK_MULT E
+   55  | E • TOK_DIV E
+   57  | E • TOK_DIV ID
+   59  | E • TOK_EQUAL E
+   60  | E • TOK_GREATER E
+   61  | E • TOK_LOWER E
+   62  | E • TOK_GREQ E
+   63  | E • TOK_LWEQ E
+   64  | E • TOK_DIFFERENT E
 
-    TOK_LACC  shift, and go to state 87
+    TOK_MULT       shift, and go to state 82
+    TOK_DIV        shift, and go to state 83
+    TOK_LOWER      shift, and go to state 84
+    TOK_GREATER    shift, and go to state 85
+    TOK_EQUAL      shift, and go to state 86
+    TOK_DIFFERENT  shift, and go to state 87
+    TOK_LWEQ       shift, and go to state 88
+    TOK_GREQ       shift, and go to state 89
 
-    IF_BLOCK  go to state 98
+    TOK_LOWER      [reduce using rule 53 (E)]
+    TOK_GREATER    [reduce using rule 53 (E)]
+    TOK_EQUAL      [reduce using rule 53 (E)]
+    TOK_DIFFERENT  [reduce using rule 53 (E)]
+    TOK_LWEQ       [reduce using rule 53 (E)]
+    TOK_GREQ       [reduce using rule 53 (E)]
+    $default       reduce using rule 53 (E)
 
 
 State 98
 
-   27 Li: Li TOK_Daca E TOK_ATUNCI $@5 IF_BLOCK $@6 TOK_ALTFEL $@7 IF_BLOCK •
+   52 E: E • TOK_PLUS E
+   53  | E • TOK_MINUS E
+   54  | E • TOK_MULT E
+   54  | E TOK_MULT E •
+   55  | E • TOK_DIV E
+   57  | E • TOK_DIV ID
+   59  | E • TOK_EQUAL E
+   60  | E • TOK_GREATER E
+   61  | E • TOK_LOWER E
+   62  | E • TOK_GREQ E
+   63  | E • TOK_LWEQ E
+   64  | E • TOK_DIFFERENT E
 
-    $default  reduce using rule 27 (Li)
+    TOK_LOWER      shift, and go to state 84
+    TOK_GREATER    shift, and go to state 85
+    TOK_EQUAL      shift, and go to state 86
+    TOK_DIFFERENT  shift, and go to state 87
+    TOK_LWEQ       shift, and go to state 88
+    TOK_GREQ       shift, and go to state 89
+
+    TOK_LOWER      [reduce using rule 54 (E)]
+    TOK_GREATER    [reduce using rule 54 (E)]
+    TOK_EQUAL      [reduce using rule 54 (E)]
+    TOK_DIFFERENT  [reduce using rule 54 (E)]
+    TOK_LWEQ       [reduce using rule 54 (E)]
+    TOK_GREQ       [reduce using rule 54 (E)]
+    $default       reduce using rule 54 (E)
+
+
+State 99
+
+   56 E: ID • TOK_DIV E
+   57  | E TOK_DIV ID •
+   58  | ID • TOK_DIV ID
+   71  | ID •
+
+    TOK_DIV  shift, and go to state 76
+
+    TOK_PLUS       reduce using rule 57 (E)
+    TOK_PLUS       [reduce using rule 71 (E)]
+    TOK_MINUS      reduce using rule 57 (E)
+    TOK_MINUS      [reduce using rule 71 (E)]
+    TOK_MULT       reduce using rule 57 (E)
+    TOK_MULT       [reduce using rule 71 (E)]
+    TOK_DIV        [reduce using rule 57 (E)]
+    TOK_DIV        [reduce using rule 71 (E)]
+    TOK_SEP        reduce using rule 57 (E)
+    TOK_SEP        [reduce using rule 71 (E)]
+    TOK_LOWER      reduce using rule 57 (E)
+    TOK_LOWER      [reduce using rule 71 (E)]
+    TOK_GREATER    reduce using rule 57 (E)
+    TOK_GREATER    [reduce using rule 71 (E)]
+    TOK_EQUAL      reduce using rule 57 (E)
+    TOK_EQUAL      [reduce using rule 71 (E)]
+    TOK_DIFFERENT  reduce using rule 57 (E)
+    TOK_DIFFERENT  [reduce using rule 71 (E)]
+    TOK_LWEQ       reduce using rule 57 (E)
+    TOK_LWEQ       [reduce using rule 71 (E)]
+    TOK_GREQ       reduce using rule 57 (E)
+    TOK_GREQ       [reduce using rule 71 (E)]
+    TOK_ATUNCI     reduce using rule 57 (E)
+    TOK_ATUNCI     [reduce using rule 71 (E)]
+    TOK_EXECUTE    reduce using rule 57 (E)
+    TOK_EXECUTE    [reduce using rule 71 (E)]
+    $default       reduce using rule 57 (E)
+
+
+State 100
+
+   52 E: E • TOK_PLUS E
+   53  | E • TOK_MINUS E
+   54  | E • TOK_MULT E
+   55  | E • TOK_DIV E
+   55  | E TOK_DIV E •
+   57  | E • TOK_DIV ID
+   59  | E • TOK_EQUAL E
+   60  | E • TOK_GREATER E
+   61  | E • TOK_LOWER E
+   62  | E • TOK_GREQ E
+   63  | E • TOK_LWEQ E
+   64  | E • TOK_DIFFERENT E
+
+    TOK_LOWER      shift, and go to state 84
+    TOK_GREATER    shift, and go to state 85
+    TOK_EQUAL      shift, and go to state 86
+    TOK_DIFFERENT  shift, and go to state 87
+    TOK_LWEQ       shift, and go to state 88
+    TOK_GREQ       shift, and go to state 89
+
+    TOK_LOWER      [reduce using rule 55 (E)]
+    TOK_GREATER    [reduce using rule 55 (E)]
+    TOK_EQUAL      [reduce using rule 55 (E)]
+    TOK_DIFFERENT  [reduce using rule 55 (E)]
+    TOK_LWEQ       [reduce using rule 55 (E)]
+    TOK_GREQ       [reduce using rule 55 (E)]
+    $default       reduce using rule 55 (E)
+
+
+State 101
+
+   52 E: E • TOK_PLUS E
+   53  | E • TOK_MINUS E
+   54  | E • TOK_MULT E
+   55  | E • TOK_DIV E
+   57  | E • TOK_DIV ID
+   59  | E • TOK_EQUAL E
+   60  | E • TOK_GREATER E
+   61  | E • TOK_LOWER E
+   61  | E TOK_LOWER E •
+   62  | E • TOK_GREQ E
+   63  | E • TOK_LWEQ E
+   64  | E • TOK_DIFFERENT E
+
+    TOK_PLUS       shift, and go to state 80
+    TOK_MINUS      shift, and go to state 81
+    TOK_MULT       shift, and go to state 82
+    TOK_DIV        shift, and go to state 83
+    TOK_LOWER      shift, and go to state 84
+    TOK_GREATER    shift, and go to state 85
+    TOK_EQUAL      shift, and go to state 86
+    TOK_DIFFERENT  shift, and go to state 87
+    TOK_LWEQ       shift, and go to state 88
+    TOK_GREQ       shift, and go to state 89
+
+    TOK_PLUS       [reduce using rule 61 (E)]
+    TOK_MINUS      [reduce using rule 61 (E)]
+    TOK_MULT       [reduce using rule 61 (E)]
+    TOK_DIV        [reduce using rule 61 (E)]
+    TOK_LOWER      [reduce using rule 61 (E)]
+    TOK_GREATER    [reduce using rule 61 (E)]
+    TOK_EQUAL      [reduce using rule 61 (E)]
+    TOK_DIFFERENT  [reduce using rule 61 (E)]
+    TOK_LWEQ       [reduce using rule 61 (E)]
+    TOK_GREQ       [reduce using rule 61 (E)]
+    $default       reduce using rule 61 (E)
+
+
+State 102
+
+   52 E: E • TOK_PLUS E
+   53  | E • TOK_MINUS E
+   54  | E • TOK_MULT E
+   55  | E • TOK_DIV E
+   57  | E • TOK_DIV ID
+   59  | E • TOK_EQUAL E
+   60  | E • TOK_GREATER E
+   60  | E TOK_GREATER E •
+   61  | E • TOK_LOWER E
+   62  | E • TOK_GREQ E
+   63  | E • TOK_LWEQ E
+   64  | E • TOK_DIFFERENT E
+
+    TOK_PLUS       shift, and go to state 80
+    TOK_MINUS      shift, and go to state 81
+    TOK_MULT       shift, and go to state 82
+    TOK_DIV        shift, and go to state 83
+    TOK_LOWER      shift, and go to state 84
+    TOK_GREATER    shift, and go to state 85
+    TOK_EQUAL      shift, and go to state 86
+    TOK_DIFFERENT  shift, and go to state 87
+    TOK_LWEQ       shift, and go to state 88
+    TOK_GREQ       shift, and go to state 89
+
+    TOK_PLUS       [reduce using rule 60 (E)]
+    TOK_MINUS      [reduce using rule 60 (E)]
+    TOK_MULT       [reduce using rule 60 (E)]
+    TOK_DIV        [reduce using rule 60 (E)]
+    TOK_LOWER      [reduce using rule 60 (E)]
+    TOK_GREATER    [reduce using rule 60 (E)]
+    TOK_EQUAL      [reduce using rule 60 (E)]
+    TOK_DIFFERENT  [reduce using rule 60 (E)]
+    TOK_LWEQ       [reduce using rule 60 (E)]
+    TOK_GREQ       [reduce using rule 60 (E)]
+    $default       reduce using rule 60 (E)
+
+
+State 103
+
+   52 E: E • TOK_PLUS E
+   53  | E • TOK_MINUS E
+   54  | E • TOK_MULT E
+   55  | E • TOK_DIV E
+   57  | E • TOK_DIV ID
+   59  | E • TOK_EQUAL E
+   59  | E TOK_EQUAL E •
+   60  | E • TOK_GREATER E
+   61  | E • TOK_LOWER E
+   62  | E • TOK_GREQ E
+   63  | E • TOK_LWEQ E
+   64  | E • TOK_DIFFERENT E
+
+    TOK_PLUS       shift, and go to state 80
+    TOK_MINUS      shift, and go to state 81
+    TOK_MULT       shift, and go to state 82
+    TOK_DIV        shift, and go to state 83
+    TOK_LOWER      shift, and go to state 84
+    TOK_GREATER    shift, and go to state 85
+    TOK_EQUAL      shift, and go to state 86
+    TOK_DIFFERENT  shift, and go to state 87
+    TOK_LWEQ       shift, and go to state 88
+    TOK_GREQ       shift, and go to state 89
+
+    TOK_PLUS       [reduce using rule 59 (E)]
+    TOK_MINUS      [reduce using rule 59 (E)]
+    TOK_MULT       [reduce using rule 59 (E)]
+    TOK_DIV        [reduce using rule 59 (E)]
+    TOK_LOWER      [reduce using rule 59 (E)]
+    TOK_GREATER    [reduce using rule 59 (E)]
+    TOK_EQUAL      [reduce using rule 59 (E)]
+    TOK_DIFFERENT  [reduce using rule 59 (E)]
+    TOK_LWEQ       [reduce using rule 59 (E)]
+    TOK_GREQ       [reduce using rule 59 (E)]
+    $default       reduce using rule 59 (E)
+
+
+State 104
+
+   52 E: E • TOK_PLUS E
+   53  | E • TOK_MINUS E
+   54  | E • TOK_MULT E
+   55  | E • TOK_DIV E
+   57  | E • TOK_DIV ID
+   59  | E • TOK_EQUAL E
+   60  | E • TOK_GREATER E
+   61  | E • TOK_LOWER E
+   62  | E • TOK_GREQ E
+   63  | E • TOK_LWEQ E
+   64  | E • TOK_DIFFERENT E
+   64  | E TOK_DIFFERENT E •
+
+    TOK_PLUS       shift, and go to state 80
+    TOK_MINUS      shift, and go to state 81
+    TOK_MULT       shift, and go to state 82
+    TOK_DIV        shift, and go to state 83
+    TOK_LOWER      shift, and go to state 84
+    TOK_GREATER    shift, and go to state 85
+    TOK_EQUAL      shift, and go to state 86
+    TOK_DIFFERENT  shift, and go to state 87
+    TOK_LWEQ       shift, and go to state 88
+    TOK_GREQ       shift, and go to state 89
+
+    TOK_PLUS       [reduce using rule 64 (E)]
+    TOK_MINUS      [reduce using rule 64 (E)]
+    TOK_MULT       [reduce using rule 64 (E)]
+    TOK_DIV        [reduce using rule 64 (E)]
+    TOK_LOWER      [reduce using rule 64 (E)]
+    TOK_GREATER    [reduce using rule 64 (E)]
+    TOK_EQUAL      [reduce using rule 64 (E)]
+    TOK_DIFFERENT  [reduce using rule 64 (E)]
+    TOK_LWEQ       [reduce using rule 64 (E)]
+    TOK_GREQ       [reduce using rule 64 (E)]
+    $default       reduce using rule 64 (E)
+
+
+State 105
+
+   52 E: E • TOK_PLUS E
+   53  | E • TOK_MINUS E
+   54  | E • TOK_MULT E
+   55  | E • TOK_DIV E
+   57  | E • TOK_DIV ID
+   59  | E • TOK_EQUAL E
+   60  | E • TOK_GREATER E
+   61  | E • TOK_LOWER E
+   62  | E • TOK_GREQ E
+   63  | E • TOK_LWEQ E
+   63  | E TOK_LWEQ E •
+   64  | E • TOK_DIFFERENT E
+
+    TOK_PLUS       shift, and go to state 80
+    TOK_MINUS      shift, and go to state 81
+    TOK_MULT       shift, and go to state 82
+    TOK_DIV        shift, and go to state 83
+    TOK_LOWER      shift, and go to state 84
+    TOK_GREATER    shift, and go to state 85
+    TOK_EQUAL      shift, and go to state 86
+    TOK_DIFFERENT  shift, and go to state 87
+    TOK_LWEQ       shift, and go to state 88
+    TOK_GREQ       shift, and go to state 89
+
+    TOK_PLUS       [reduce using rule 63 (E)]
+    TOK_MINUS      [reduce using rule 63 (E)]
+    TOK_MULT       [reduce using rule 63 (E)]
+    TOK_DIV        [reduce using rule 63 (E)]
+    TOK_LOWER      [reduce using rule 63 (E)]
+    TOK_GREATER    [reduce using rule 63 (E)]
+    TOK_EQUAL      [reduce using rule 63 (E)]
+    TOK_DIFFERENT  [reduce using rule 63 (E)]
+    TOK_LWEQ       [reduce using rule 63 (E)]
+    TOK_GREQ       [reduce using rule 63 (E)]
+    $default       reduce using rule 63 (E)
+
+
+State 106
+
+   52 E: E • TOK_PLUS E
+   53  | E • TOK_MINUS E
+   54  | E • TOK_MULT E
+   55  | E • TOK_DIV E
+   57  | E • TOK_DIV ID
+   59  | E • TOK_EQUAL E
+   60  | E • TOK_GREATER E
+   61  | E • TOK_LOWER E
+   62  | E • TOK_GREQ E
+   62  | E TOK_GREQ E •
+   63  | E • TOK_LWEQ E
+   64  | E • TOK_DIFFERENT E
+
+    TOK_PLUS       shift, and go to state 80
+    TOK_MINUS      shift, and go to state 81
+    TOK_MULT       shift, and go to state 82
+    TOK_DIV        shift, and go to state 83
+    TOK_LOWER      shift, and go to state 84
+    TOK_GREATER    shift, and go to state 85
+    TOK_EQUAL      shift, and go to state 86
+    TOK_DIFFERENT  shift, and go to state 87
+    TOK_LWEQ       shift, and go to state 88
+    TOK_GREQ       shift, and go to state 89
+
+    TOK_PLUS       [reduce using rule 62 (E)]
+    TOK_MINUS      [reduce using rule 62 (E)]
+    TOK_MULT       [reduce using rule 62 (E)]
+    TOK_DIV        [reduce using rule 62 (E)]
+    TOK_LOWER      [reduce using rule 62 (E)]
+    TOK_GREATER    [reduce using rule 62 (E)]
+    TOK_EQUAL      [reduce using rule 62 (E)]
+    TOK_DIFFERENT  [reduce using rule 62 (E)]
+    TOK_LWEQ       [reduce using rule 62 (E)]
+    TOK_GREQ       [reduce using rule 62 (E)]
+    $default       reduce using rule 62 (E)
+
+
+State 107
+
+   31 Li: Li TOK_DACA E TOK_ATUNCI $@5 • IF_BLOCK
+
+    TOK_LACC  shift, and go to state 110
+
+    IF_BLOCK  go to state 111
+
+
+State 108
+
+   35 Li: Li TOK_Daca E TOK_ATUNCI $@6 • IF_BLOCK $@7 TOK_ALTFEL $@8 IF_BLOCK
+
+    TOK_LACC  shift, and go to state 110
+
+    IF_BLOCK  go to state 112
+
+
+State 109
+
+   29 Li: Li WHILE_SETUP TOK_WHILE E TOK_EXECUTE • $@4 IF_BLOCK
+
+    $default  reduce using rule 28 ($@4)
+
+    $@4  go to state 113
+
+
+State 110
+
+   26 IF_BLOCK: TOK_LACC • $@3 Li TOK_RACC
+
+    $default  reduce using rule 25 ($@3)
+
+    $@3  go to state 114
+
+
+State 111
+
+   31 Li: Li TOK_DACA E TOK_ATUNCI $@5 IF_BLOCK •
+
+    $default  reduce using rule 31 (Li)
+
+
+State 112
+
+   35 Li: Li TOK_Daca E TOK_ATUNCI $@6 IF_BLOCK • $@7 TOK_ALTFEL $@8 IF_BLOCK
+
+    $default  reduce using rule 33 ($@7)
+
+    $@7  go to state 115
+
+
+State 113
+
+   29 Li: Li WHILE_SETUP TOK_WHILE E TOK_EXECUTE $@4 • IF_BLOCK
+
+    TOK_LACC  shift, and go to state 110
+
+    IF_BLOCK  go to state 116
+
+
+State 114
+
+   26 IF_BLOCK: TOK_LACC $@3 • Li TOK_RACC
+
+    ID            shift, and go to state 34
+    TOK_INTREG    shift, and go to state 1
+    TOK_REAL      shift, and go to state 2
+    TOK_ZECIMAL   shift, and go to state 3
+    TOK_AFISEAZA  shift, and go to state 35
+    TOK_CITESTE   shift, and go to state 36
+    TOK_CALL      shift, and go to state 37
+
+    ID            [reduce using rule 27 (Li)]
+    TOK_INTREG    [reduce using rule 27 (Li)]
+    TOK_REAL      [reduce using rule 27 (Li)]
+    TOK_ZECIMAL   [reduce using rule 27 (Li)]
+    TOK_AFISEAZA  [reduce using rule 27 (Li)]
+    TOK_CITESTE   [reduce using rule 27 (Li)]
+    TOK_CALL      [reduce using rule 27 (Li)]
+    $default      reduce using rule 27 (Li)
+
+    D   go to state 38
+    Li  go to state 117
+    I   go to state 40
+
+
+State 115
+
+   35 Li: Li TOK_Daca E TOK_ATUNCI $@6 IF_BLOCK $@7 • TOK_ALTFEL $@8 IF_BLOCK
+
+    TOK_ALTFEL  shift, and go to state 118
+
+
+State 116
+
+   29 Li: Li WHILE_SETUP TOK_WHILE E TOK_EXECUTE $@4 IF_BLOCK •
+
+    $default  reduce using rule 29 (Li)
+
+
+State 117
+
+   26 IF_BLOCK: TOK_LACC $@3 Li • TOK_RACC
+   29 Li: Li • WHILE_SETUP TOK_WHILE E TOK_EXECUTE $@4 IF_BLOCK
+   31   | Li • TOK_DACA E TOK_ATUNCI $@5 IF_BLOCK
+   35   | Li • TOK_Daca E TOK_ATUNCI $@6 IF_BLOCK $@7 TOK_ALTFEL $@8 IF_BLOCK
+   36   | Li • BLOCK
+   37   | Li • TOK_COMM
+   38   | Li • I TOK_SEP
+
+    ID            shift, and go to state 34
+    TOK_INTREG    shift, and go to state 1
+    TOK_REAL      shift, and go to state 2
+    TOK_ZECIMAL   shift, and go to state 3
+    TOK_AFISEAZA  shift, and go to state 35
+    TOK_CITESTE   shift, and go to state 36
+    TOK_COMM      shift, and go to state 49
+    TOK_LACC      shift, and go to state 15
+    TOK_RACC      shift, and go to state 119
+    TOK_DACA      shift, and go to state 51
+    TOK_Daca      shift, and go to state 52
+    TOK_CALL      shift, and go to state 37
+
+    $default  reduce using rule 40 (WHILE_SETUP)
+
+    D            go to state 38
+    BLOCK        go to state 53
+    WHILE_SETUP  go to state 54
+    I            go to state 55
+
+
+State 118
+
+   35 Li: Li TOK_Daca E TOK_ATUNCI $@6 IF_BLOCK $@7 TOK_ALTFEL • $@8 IF_BLOCK
+
+    $default  reduce using rule 34 ($@8)
+
+    $@8  go to state 120
+
+
+State 119
+
+   26 IF_BLOCK: TOK_LACC $@3 Li TOK_RACC •
+
+    $default  reduce using rule 26 (IF_BLOCK)
+
+
+State 120
+
+   35 Li: Li TOK_Daca E TOK_ATUNCI $@6 IF_BLOCK $@7 TOK_ALTFEL $@8 • IF_BLOCK
+
+    TOK_LACC  shift, and go to state 110
+
+    IF_BLOCK  go to state 121
+
+
+State 121
+
+   35 Li: Li TOK_Daca E TOK_ATUNCI $@6 IF_BLOCK $@7 TOK_ALTFEL $@8 IF_BLOCK •
+
+    $default  reduce using rule 35 (Li)
