@@ -1,0 +1,46 @@
+inceput 
+{
+    intreg x = 10;
+    real y = 3.14;
+    zecimal z = 2.5f; x = x + 5;
+    citeste x y; 
+    citeste z;
+    //x = x/3;
+    x = x - 1;
+    daca x > 3 atunci {
+        daca y < 10 atunci { 
+            intreg k=1; 
+            afiseaza k " ";
+            }
+        intreg t = 4;
+        afiseaza t " ";
+    }
+    afiseaza "a trecut\n";
+    //afiseaza t " ";
+    
+    afiseaza "introdu var\n";
+    intreg var;
+    citeste var;
+    Daca var > 0 atunci {
+        afiseaza "var este pozitiv\n";
+    } altfel {
+        afiseaza "var este negativ\n";
+    }
+
+    //test comm
+    /*afiseaza "\t";
+     miroase a zmeura*/
+    { 
+        afiseaza "nu "; 
+    }
+
+    cat timp var > 0 executa 
+    {
+        afiseaza var " ";
+        var = var - 1;
+        //afiseaza x " ";
+    }
+
+
+    //afiseaza y "\n";
+}

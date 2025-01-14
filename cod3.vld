@@ -1,9 +1,8 @@
 func test x y {
     afiseaza x;
     afiseaza " ";
-    /*daca y > 5 atunci {
     afiseaza y;
-    }*/
+    
 }
 
 inceput 
